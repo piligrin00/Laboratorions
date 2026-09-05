@@ -1,0 +1,108 @@
+---
+import { TECNOLOGIA, MATERIAIS } from '../../data/site';
+import Cabecalho from '../Cabecalho.astro';
+import CtaButton from '../CtaButton.astro';
+import MediaPlaceholder from '../MediaPlaceholder.astro';
+import { Picture } from 'astro:assets';
+
+/**
+ * Parque digital, na faixa escura.
+ *
+ * FOTO DA MÁQUINA, nunca ícone. Um ícone de "impressora" prova
+ * exatamente nada, e uma grade de quatro ícones em quadrado arredondado
+ * é item da lista negra. Sem as fotos, os placeholders ficam visíveis e
+ * marcados, o que é honesto; substituir por ícone "provisório" não é,
+ * porque provisório vira definitivo.
+ *
+ * TRÊS DESTAS SÃO FOTO DE CATÁLOGO DO FABRICANTE (CEREC MC X, Anycubic
+ * X 6Ks + Wash & Cure, Multimat NTX), por decisão do cliente. Eu
+ * argumentei contra e registro o argumento: o título da seção é "o
+ * parque é nosso", e render de estúdio é a mesma imagem que está no
+ * site de todo revendedor, então ela não prova posse. O que reduz o
+ * problema é que os modelos do catálogo são exatamente os que o
+ * laboratório tem — conferi contra as fotos do parque real, que ficaram
+ * guardadas em midia-original/fotos-reais-maquinas/ e podem voltar a
+ * qualquer momento.
+ *
+ * A PROPORÇÃO É 4:5, não 4:3, e a razão é essa troca: as imagens do
+ * fabricante são retrato e quadrada. Num slot deitado com object-cover,
+ * o forno perderia topo e base. Aqui as três de fundo preto entram com
+ * padding no MESMO preto — invisível, porque o fundo delas já é preto —
+ * e nenhuma máquina é cortada. A do scanner é foto real e enquadra
+ * cheia.
+ *
+ * Cada card leva um chip com o que a máquina RESOLVE para o dentista,
+ * não com a especificação dela.
+ */
+const arquivos = import.meta.glob<{ default: ImageMetadata }>(
+  '../../assets/maquinas/*.{jpg,jpeg,png,webp,avif}',
+  { eager: true },
+);
+const porNome = new Map<string, ImageMetadata>(
+  Object.entries(arquivos).map(([caminho, mod]) => [
+    caminho.split('/').pop() as string,
+    mod.default,
+  ]),
+);
+---
+
+<Cabecalho
+  titulo="O parque é nosso, inclusive o forno."
+  apoio="Esse parque é nosso, não seu. Você usa ele sem ter que comprar nada."
+  class="mb-14"
+/>
+
+<div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+  {
+    TECNOLOGIA.map((item, i) => {
+      const foto = porNome.get(item.arquivo) ?? null;
+
+      return (
+        <article data-reveal style={`--reveal-delay: ${i * 70}ms`}>
+          <div class="relative overflow-hidden rounded-[14px]">
+            {
+              foto ? (
+                <Picture
+                  src={foto}
+                  alt={`${item.titulo} em operação no Laboratório NS`}
+                  formats={['avif', 'webp']}
+                  widths={[280, 400, 560, 720]}
+                  sizes="(min-width: 1024px) 24vw, (min-width: 640px) 46vw, 92vw"
+                  loading="lazy"
+                  class="w-full object-cover"
+                  style="aspect-ratio: 4/5;"
+                />
+              ) : (
+                <MediaPlaceholder
+                  label={`XXX-MAQUINA-${String(i + 1).padStart(2, '0')}`}
+                  ratio="4/5"
+                  nota={`Foto real de ${item.titulo.toLowerCase()}. Solte em src/assets/maquinas/ como ${item.arquivo}.`}
+                />
+              )
+            }
+
+            <p
+              class="readout absolute bottom-3 left-3 rounded-full border border-hairline bg-surface px-2.5 py-1"
+            >
+              {item.resolve}
+            </p>
+          </div>
+
+          <h3 class="mt-5 text-h3 text-ink">{item.titulo}</h3>
+          <p class="mt-2 text-body-sm text-ink-muted">{item.descricao}</p>
+        </article>
+      );
+    })
+  }
+</div>
+
+<div class="rule mt-14 pt-10" data-reveal>
+  <h3 class="readout">Materiais</h3>
+  <ul class="mt-5 flex flex-wrap gap-2.5">
+    {MATERIAIS.map((material) => <li class="chip">{material}</li>)}
+  </ul>
+</div>
+
+<div class="mt-12" data-reveal>
+  <CtaButton context="fluxoDigital" variant="solida" />
+</div>

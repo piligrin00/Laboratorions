@@ -1,0 +1,82 @@
+---
+import { waLink, type WaContext } from '../data/site';
+import WhatsappIcon from './WhatsappIcon.astro';
+import { Icon } from 'astro-icon/components';
+
+/**
+ * O único caminho de conversão do site.
+ *
+ * Todo CTA de WhatsApp passa por aqui, e por isso a mensagem
+ * pré-preenchida, o `rel="noopener"` e o evento de tracking nunca saem
+ * de sincronia. Um CTA novo custa uma linha, não uma reimplementação.
+ *
+ * `data-wa` é o gancho do listener delegado em Base.astro, que dispara
+ * dataLayer.push e fbq, sempre sob guard, para não quebrar quando não
+ * há tracking ativo.
+ *
+ * FORMA: pílula pequena com seta. Sem sombra. As três variantes usam a
+ * mesma altura útil de 44px, mas pesos visuais diferentes:
+ *   solida  = ação primária. No máximo uma por dobra.
+ *   fantasma = ação secundária. Só o fio de 1px.
+ *   texto   = fecho de seção. Nem caixa nem fundo.
+ *
+ * Nenhum rótulo genérico. `Saiba mais` e `Comece agora` não existem
+ * aqui: todo CTA é uma fala concreta que o dentista poderia dizer.
+ */
+interface Props {
+  context: WaContext;
+  variant?: 'solida' | 'fantasma' | 'texto';
+  label?: string;
+  /** Ícone do WhatsApp antes do rótulo. Padrão: só na variante sólida. */
+  icone?: boolean;
+  class?: string;
+  /** Para CTAs que apontam para âncora interna, não para o WhatsApp. */
+  href?: string;
+}
+
+const {
+  context,
+  variant = 'solida',
+  label,
+  icone = variant === 'solida',
+  class: className = '',
+  href,
+} = Astro.props;
+
+const interno = Boolean(href);
+const destino = href ?? waLink(context);
+const texto = label ?? 'Falar no WhatsApp';
+
+const base =
+  'group inline-flex min-h-11 items-center gap-2 rounded-full text-body-sm font-medium transition duration-250 ease-out';
+
+const variantes = {
+  /* `text-accent-ink` inverte por faixa: escuro sobre o verde-limao da
+     faixa escura, claro sobre o verde escuro da faixa clara. Sem isso,
+     o rotulo do botao reprova AA numa das duas. */
+  solida:
+    'bg-accent px-5 text-accent-ink hover:bg-accent-hover active:scale-[0.99]',
+  fantasma:
+    'border border-hairline px-5 text-ink hover:border-accent/45 hover:bg-surface-hover',
+  texto: '-my-2 text-accent hover:text-accent-hover',
+} as const;
+---
+
+<a
+  href={destino}
+  class:list={[base, variantes[variant], className]}
+  {...interno
+    ? {}
+    : {
+        target: '_blank',
+        rel: 'noopener',
+        'data-wa': context,
+      }}
+>
+  {icone && <WhatsappIcon class="size-4 shrink-0" />}
+  <span>{texto}</span>
+  <Icon
+    name="lucide:arrow-right"
+    class="size-4 shrink-0 transition-transform duration-250 ease-out group-hover:translate-x-0.5"
+  />
+</a>

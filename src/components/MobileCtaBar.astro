@@ -1,0 +1,36 @@
+---
+import { waLink } from '../data/site';
+import WhatsappIcon from './WhatsappIcon.astro';
+
+/**
+ * Barra fixa inferior — so abaixo de 640px, substituindo o botao
+ * flutuante (ver a decisao em WhatsappFab.astro).
+ *
+ * Alvo de toque de largura cheia: no celular, entre pacientes, com uma
+ * mao, o alvo maior possivel vence um circulo de 56px no canto.
+ * `env(safe-area-inset-bottom)` mantem a barra acima da barra de gestos
+ * do iPhone.
+ */
+---
+
+<div
+  class="fixed inset-x-0 bottom-0 z-50 border-t border-hairline bg-surface sm:hidden"
+  style="padding-bottom: env(safe-area-inset-bottom, 0px);"
+>
+  <div class="px-4 py-3">
+    <a
+      href={waLink('header')}
+      target="_blank"
+      rel="noopener"
+      data-wa="header"
+      class="flex items-center justify-center gap-2.5 rounded-full bg-accent px-5 py-3.5 text-body-sm font-medium text-surface active:scale-[0.99]"
+    >
+      <WhatsappIcon class="size-5" />
+      <span>Falar no WhatsApp</span>
+    </a>
+  </div>
+</div>
+
+{/* Compensa a altura da barra para que o rodape nunca fique escondido
+    atras dela no final do scroll. */}
+<div class="h-[5.25rem] sm:hidden" aria-hidden="true"></div>

@@ -1,0 +1,58 @@
+---
+import { AREA_ATENDIMENTO } from '../../data/site';
+import Cabecalho from '../Cabecalho.astro';
+import CtaButton from '../CtaButton.astro';
+import SeloArea from '../SeloArea.astro';
+
+/**
+ * Area de atendimento, na faixa escura.
+ *
+ * A lista de bairros existe por SEO local, e por isso e texto de
+ * verdade no HTML, nao imagem.
+ *
+ * SEM iframe do Google Maps: pesa, carrega script de terceiro, e o
+ * endereco completo nao e publico de todo modo.
+ *
+ * O CTA e uma pergunta aberta de proposito. Fora da Zona Sul e da Barra
+ * o atendimento e caso a caso, e o texto nao fecha a porta para um
+ * dentista da Tijuca ou de Niteroi.
+ */
+---
+
+<div class="grid gap-12 lg:grid-cols-[1fr_auto] lg:items-start lg:gap-16">
+  <div>
+    <Cabecalho
+      titulo="Retirada e entrega no seu consultório."
+      apoio={AREA_ATENDIMENTO.texto}
+      class="mb-10"
+    />
+
+    <ul class="flex flex-wrap gap-2.5" data-reveal>
+      {AREA_ATENDIMENTO.bairros.map((bairro) => <li class="chip">{bairro}</li>)}
+    </ul>
+
+    <p class="measure mt-8 text-body-sm text-ink-muted" data-reveal>
+      {AREA_ATENDIMENTO.reforco}
+    </p>
+
+    <p class="measure mt-4 text-body-sm text-ink-muted" data-reveal>
+      Consultório fora dessa lista? Fale com a gente de todo jeito. Fora da
+      Zona Sul e da Barra combinamos caso a caso.
+    </p>
+
+    <div class="mt-8" data-reveal>
+      {/* Contexto `bairro`, nao `consultoria`: essa mensagem e sobre
+          cobertura geografica, e `consultoria` agora e a mensagem de
+          migracao para o digital (docs/REPOSICIONAMENTO.md). */}
+      <CtaButton
+        context="bairro"
+        variant="solida"
+        label="Perguntar se atendem meu bairro"
+      />
+    </div>
+  </div>
+
+  <div class="text-accent lg:pt-4" data-reveal style="--reveal-delay: 120ms">
+    <SeloArea />
+  </div>
+</div>

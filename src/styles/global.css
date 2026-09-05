@@ -1,0 +1,445 @@
+@import "tailwindcss";
+
+/* =====================================================================
+   FONTES — servidas localmente, nunca do CDN do Google
+   ---------------------------------------------------------------------
+   Os .woff2 vem dos pacotes @fontsource e sao copiados para
+   public/fonts/ para poderem ser pre-carregados por um caminho estavel
+   (o Vite renomearia o arquivo com hash a cada build).
+
+   So o subset `latin` e servido: ele cobre toda a acentuacao do
+   portugues. `latin-ext` seria peso morto aqui.
+   ===================================================================== */
+
+@font-face {
+  font-family: 'Newsreader';
+  src: url('/fonts/newsreader-latin-var.woff2') format('woff2');
+  font-weight: 200 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'IBM Plex Sans';
+  src: url('/fonts/plex-latin-var.woff2') format('woff2');
+  font-weight: 100 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* =====================================================================
+   LABORATORIO NS — DESIGN TOKENS
+   ---------------------------------------------------------------------
+   A paleta escura saiu do logo da marca e e RESTRICAO TRAVADA.
+   Os tokens claros existem para o ritmo de faixas: a pagina alterna
+   blocos escuros e claros, com borda dura entre eles.
+
+   Mapeamento nome-do-briefing -> nome-da-classe-Tailwind:
+     bg-base        #0C1014               -> bg-surface
+     bg-elevated    #191919               -> bg-surface-raised
+     bg-hover       #22262A               -> bg-surface-hover
+     accent         #70C81A               -> bg-accent / text-accent
+     accent-hover   #5FAF14               -> bg-accent-hover
+     text-primary   #E3E3E1               -> text-ink
+     text-secondary #9CA3A1               -> text-ink-muted
+     border         rgba(227,227,225,.10) -> border-hairline
+
+   Os nomes mudaram porque `bg-base` colidiria com `text-base`, que no
+   Tailwind e utilitario de TAMANHO de fonte. Os valores sao identicos.
+   ===================================================================== */
+
+@theme {
+  /* --- Superficies escuras --- */
+  --color-surface: #0C1014;
+  --color-surface-raised: #191919;
+  --color-surface-hover: #22262A;
+
+  /* --- Superficies claras (faixas de respiro) --- */
+  --color-surface-light: #F2F4F0;
+  --color-surface-mint: #E4EDE0;
+
+  /* --- Verde da marca: ACENTO, nunca fundo de bloco inteiro --- */
+  --color-accent: #70C81A;
+  --color-accent-hover: #5FAF14;
+  /* Verde obrigatorio sobre fundo claro.
+     A direcao pedia #4E9310, mas medido dá 3.45:1 sobre #F2F4F0 e
+     3.18:1 sobre a menta: reprova o minimo AA de 4.5 para texto
+     normal. #3A6F0B dá 5.49:1 e 5.06:1, e serve nos dois papeis, como
+     cor de texto e como fundo de botao com texto claro em cima. */
+  --color-accent-on-light: #3A6F0B;
+
+  /* Cor do texto que fica SOBRE o preenchimento verde. Inverte por
+     faixa: escuro sobre o verde-limao, claro sobre o verde escuro. */
+  --color-accent-ink: #0C1014;
+
+  /* --- Texto sobre escuro. Branco puro e PROIBIDO. --- */
+  --color-ink: #E3E3E1;
+  --color-ink-muted: #9CA3A1;
+
+  /* --- Texto sobre claro --- */
+  --color-on-light: #14181A;
+  --color-on-light-soft: #5C635E;
+
+  /* --- Bordas --- */
+  --color-hairline: rgb(227 227 225 / 0.10);
+  --color-hairline-light: rgb(20 24 26 / 0.10);
+
+  /* --- Tipografia ---
+     Titulos em SERIFA de peso regular (400), nunca bold. Serifa leve em
+     tamanho grande e o movimento que mais afasta o site da estetica de
+     interface gerada; titulo em sans-serif bold e o que todo gerador
+     entrega.
+
+     A direcao pedia Instrument Serif e autorizava Newsreader como
+     alternativa. Ficou Newsreader por dois motivos: o detector do
+     Impeccable sinaliza Instrument Serif como face saturada (ela e A
+     fonte do movimento "serifa editorial", e por isso mesmo comum), e
+     Newsreader e variavel, entao um unico arquivo cobre a faixa de peso
+     inteira em vez de travar em 400.
+
+     Corpo em IBM Plex Sans, que nasceu como tipografia de documentacao
+     tecnica da IBM. Corpo pequeno (15 a 16px) com muito ar em volta e
+     deliberado: e o que da aparencia editorial em vez de landing page.
+
+     A monoespacada e do SISTEMA, sem webfont: ela aparece so na ficha
+     de prazos e nos rotulos de dado, ou seja, para medicao, que e o uso
+     legitimo de mono e nao fantasia de "tecnico". Zero bytes baixados. */
+  --font-display: 'Newsreader', ui-serif, Georgia, 'Times New Roman', serif;
+  --font-sans: 'IBM Plex Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: ui-monospace, 'SFMono-Regular', 'Cascadia Mono', Menlo, Consolas, monospace;
+
+  /* --- Escala tipografica --- */
+  --text-display: clamp(2.5rem, 6vw, 4.5rem);
+  --text-display--line-height: 1.05;
+  --text-display--letter-spacing: -0.02em;
+
+  --text-h2: clamp(1.875rem, 4vw, 3rem);
+  --text-h2--line-height: 1.05;
+  --text-h2--letter-spacing: -0.02em;
+
+  --text-h3: 1.0625rem;
+  --text-h3--line-height: 1.35;
+
+  --text-body: 1rem;
+  --text-body--line-height: 1.65;
+
+  --text-body-sm: 0.9375rem;
+  --text-body-sm--line-height: 1.6;
+
+  --text-caption: 0.875rem;
+  --text-caption--line-height: 1.45;
+
+  --text-readout: 0.75rem;
+  --text-readout--line-height: 1.4;
+  --text-readout--letter-spacing: 0.08em;
+
+  /* --- Motion --- */
+  --ease-out-soft: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* =====================================================================
+   BASE
+   ===================================================================== */
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    /* Folga para o header fixo ao pular para uma ancora. Precisa ser
+       maior que a altura dele (5.5rem em desktop), senao o titulo da
+       secao para debaixo da barra. */
+    scroll-padding-top: 7rem;
+    -webkit-text-size-adjust: 100%;
+    /* A pagina abre e fecha escura, entao os controles do navegador
+       seguem o tema escuro. */
+    color-scheme: dark;
+    scrollbar-color: var(--color-surface-hover) var(--color-surface);
+    scrollbar-width: thin;
+  }
+
+  body {
+    background-color: var(--color-surface);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: var(--text-body);
+    line-height: 1.65;
+    caret-color: var(--color-accent);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    text-wrap: balance;
+  }
+
+  h3,
+  h4 {
+    font-family: var(--font-sans);
+    font-weight: 600;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /* Foco visivel em tudo que e interativo. */
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+    border-radius: 0.25rem;
+  }
+
+  :focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  ::selection {
+    background-color: var(--color-accent);
+    color: var(--color-surface);
+  }
+
+  /* Barra de rolagem: WebKit nao respeita scrollbar-color em todo caso. */
+  ::-webkit-scrollbar {
+    inline-size: 10px;
+    block-size: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--color-surface);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-surface-hover);
+    border-radius: 9999px;
+    border: 2px solid var(--color-surface);
+  }
+}
+
+/* =====================================================================
+   FAIXAS
+   ---------------------------------------------------------------------
+   A pagina e uma pilha de faixas full-bleed com borda dura entre elas.
+   Sem gradiente de transicao: a mudanca de fundo E a divisao.
+
+   Abre e fecha escuro, entao o site le como escuro. As faixas claras
+   existem para dar respiro e para as fotos de trabalho respirarem:
+   protese fotografada aparece melhor sobre fundo claro.
+   ===================================================================== */
+
+@layer components {
+  .band-inner {
+    margin-inline: auto;
+    max-inline-size: 1200px;
+    padding-inline: 1.25rem;
+  }
+
+  @media (min-width: 640px) {
+    .band-inner {
+      padding-inline: 2rem;
+    }
+  }
+
+  /* Faixa escura: herda as cores do body. */
+  .band-dark {
+    background-color: var(--color-surface);
+  }
+
+  /* Faixa clara: redefine ink, hairline, accent e superficie de card.
+     Os utilitarios de cor usados dentro das secoes leem estas
+     variaveis, entao a mesma marcacao serve nas duas faixas e nenhum
+     componente precisa saber em que faixa esta. */
+  .band-light,
+  .band-mint {
+    --color-ink: var(--color-on-light);
+    --color-ink-muted: var(--color-on-light-soft);
+    --color-hairline: var(--color-hairline-light);
+    --color-accent: var(--color-accent-on-light);
+    --color-accent-hover: #2E5A08;
+    --color-accent-ink: var(--color-surface-light);
+    --color-surface-raised: #FFFFFF;
+    --color-surface-hover: #E9EBE6;
+    color: var(--color-on-light);
+  }
+
+  .band-light {
+    background-color: var(--color-surface-light);
+  }
+
+  .band-mint {
+    background-color: var(--color-surface-mint);
+  }
+
+  /* Medida de texto corrido. Texto largo demais e sinal de pagina
+     gerada; 620px mantem a linha em torno de 70 caracteres. */
+  .measure {
+    max-inline-size: 620px;
+  }
+
+  /* --- Rotulo de dado -----------------------------------------------
+     Monoespacada do sistema, caixa-alta, tracking aberto. Serve para
+     medida e etiqueta de dado, nunca como sobretitulo de heading. */
+  .readout {
+    font-family: var(--font-mono);
+    font-size: var(--text-readout);
+    line-height: var(--text-readout--line-height);
+    letter-spacing: var(--text-readout--letter-spacing);
+    text-transform: uppercase;
+    color: var(--color-ink-muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Numero de destaque: serifa grande, nunca sans bold. */
+  .numeral {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
+    color: var(--color-accent);
+  }
+
+  /* --- Superficie de card ------------------------------------------
+     Fio de 1px e cor. Sem sombra, sem gradiente, sem glow: as
+     superficies se separam por cor e espaco, nao por elevacao. */
+  .card {
+    border: 1px solid var(--color-hairline);
+    border-radius: 14px;
+    background-color: var(--color-surface-raised);
+    transition:
+      border-color 250ms var(--ease-out-soft),
+      background-color 250ms var(--ease-out-soft);
+  }
+
+  .card:hover {
+    border-color: color-mix(in srgb, var(--color-accent) 40%, transparent);
+  }
+
+  /* --- Chip -------------------------------------------------------- */
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: 1px solid var(--color-hairline);
+    border-radius: 9999px;
+    padding: 0.4375rem 0.875rem;
+    font-size: var(--text-caption);
+    line-height: 1;
+    color: var(--color-ink-muted);
+    background-color: var(--color-surface-raised);
+  }
+
+  /* --- Regua fina de separacao interna ----------------------------- */
+  .rule {
+    border-block-start: 1px solid var(--color-hairline);
+  }
+
+  /* --- Ficha de prazos: linha com conducao pontilhada --------------
+     A conducao e um background repetido, nao uma string de pontos:
+     assim ela se estica sozinha em qualquer largura e o leitor de tela
+     nao le "ponto ponto ponto". */
+  .ficha-linha {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    font-family: var(--font-mono);
+    /* 13px em vez de 14: o rotulo mais longo da ficha cabe em UMA linha.
+       Quebrar o rotulo em duas colapsa a conducao pontilhada num toco e
+       destroi a leitura de documento, que e a razao do cartao existir. */
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  .ficha-linha > dt {
+    color: var(--color-ink);
+    white-space: nowrap;
+  }
+
+  .ficha-linha > .conducao {
+    flex: 1 1 auto;
+    align-self: center;
+    block-size: 1px;
+    min-inline-size: 1.5rem;
+    background-image: radial-gradient(
+      circle,
+      var(--color-ink-muted) 0.5px,
+      transparent 0.5px
+    );
+    background-size: 5px 1px;
+    background-repeat: repeat-x;
+    opacity: 0.65;
+  }
+
+  .ficha-linha > dd {
+    color: var(--color-accent);
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+/* =====================================================================
+   ANIMACAO DE ENTRADA
+   fade + slide-up de 16px ao entrar na viewport.
+
+   `.js` e obrigatorio no seletor: sem JavaScript nao existe quem remova
+   o estado escondido, e a pagina toda ficaria em branco.
+   ===================================================================== */
+
+@layer components {
+  .js [data-reveal] {
+    opacity: 0;
+    transform: translateY(16px);
+    transition:
+      opacity 500ms var(--ease-out-soft),
+      transform 500ms var(--ease-out-soft);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+
+  .js [data-reveal='in'] {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Selo circular da area de atendimento: o unico elemento em rotacao
+     no site inteiro. */
+  .selo-gira {
+    animation: gira 34s linear infinite;
+    transform-origin: center;
+  }
+
+  @keyframes gira {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+}
+
+/* =====================================================================
+   prefers-reduced-motion: desliga animacao, nunca conteudo.
+   ===================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .js [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .selo-gira {
+    animation: none !important;
+  }
+}

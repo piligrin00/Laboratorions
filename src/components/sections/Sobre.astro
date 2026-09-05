@@ -1,0 +1,120 @@
+---
+import { SOBRE, NEGOCIO } from '../../data/site';
+import Cabecalho from '../Cabecalho.astro';
+import MediaPlaceholder from '../MediaPlaceholder.astro';
+import { Picture } from 'astro:assets';
+
+/**
+ * Sobre o laboratório E sobre quem responde por ele.
+ *
+ * A foto ao lado é do ANDRÉ, não da bancada: o dentista terceiriza a
+ * boca do paciente dele, e isso é uma decisão de confiança. Confiança
+ * tem rosto. Uma foto de máquina aqui provaria capacidade, que já está
+ * provada na seção de Tecnologia, e deixaria a pergunta que importa
+ * ("quem é essa gente?") sem resposta.
+ *
+ * O SLOT SE ADAPTA À FOTO, a foto não se adapta ao slot. A proporção
+ * sai da própria `ImageMetadata` do arquivo enviado, arredondada para
+ * a mais próxima entre retrato 4:5, quadrado e paisagem 4:3. Forçar um
+ * formato fixo aqui foi um erro já cometido neste projeto no herói: um
+ * retrato entrou num slot deitado e o scanner ficou fora do quadro.
+ * A foto do André é deitada e tem o scanner e a tela com a arcada
+ * escaneada ao lado dele — recortar para retrato jogaria fora metade do
+ * que a foto prova.
+ *
+ * SOBRE A PROCEDÊNCIA DESTA FOTO. O arquivo carrega um manifesto C2PA
+ * assinado pela OpenAI, com `c2pa.created` por `gpt-image` e
+ * `digitalSourceType: trainedAlgorithmicMedia`. Eu li isso e recusei a
+ * foto de primeira, tratando-a como pessoa fabricada. ESTAVA ERRADO, e
+ * a verificação é o que corrigiu: comparei o rosto com quadros do vídeo
+ * que o cliente filmou (61,5s e 68s) e é o mesmo homem — formato do
+ * rosto, linha do cabelo, sobrancelha, nariz, tom de pele. O logo no
+ * jaleco também confere com public/logo.png, com o acento certo.
+ *
+ * O que o manifesto descreve, então, é reprocessamento de uma foto real
+ * do André, não invenção de alguém. gpt-image regenera todos os pixels
+ * mesmo quando parte de uma imagem enviada, e é por isso que ele marca
+ * o resultado como `created`. A lição fica: o manifesto diz COMO os
+ * pixels nasceram, não SE a pessoa existe. Só a comparação com material
+ * real responde a segunda pergunta, e ela é obrigatória antes de
+ * recusar ou aceitar uma foto de pessoa neste site.
+ *
+ * O AVIF que o Astro gera não leva o manifesto adiante — é como o
+ * pipeline funciona, não escolha de esconder. O PNG com o C2PA intacto
+ * está guardado em midia-original/.
+ *
+ * O texto é dividido em dois: primeiro o laboratório, depois a pessoa,
+ * com o nome e o cargo destacados entre os dois. Um parágrafo só
+ * misturaria fundação, tecnologia e biografia na mesma respiração.
+ */
+
+const arquivos = import.meta.glob<{ default: ImageMetadata }>(
+  '../../assets/lab/*.{jpg,jpeg,png,webp,avif}',
+  { eager: true },
+);
+const foto = Object.values(arquivos)[0]?.default ?? null;
+
+/* Encaixa a foto na proporção mais próxima em vez de recortá-la para
+   uma medida arbitrária. Três opções bastam: mais de 15% de diferença
+   entre lados já é claramente retrato ou paisagem. */
+function proporcaoDe(f: ImageMetadata): string {
+  const r = f.width / f.height;
+  if (r < 0.87) return '4/5';
+  if (r > 1.15) return '4/3';
+  return '1/1';
+}
+const proporcao = foto ? proporcaoDe(foto) : '4/3';
+---
+
+<div class="grid gap-12 lg:grid-cols-[1fr_0.8fr] lg:items-start lg:gap-16">
+  <div>
+    <Cabecalho titulo={SOBRE.titulo} class="mb-8" />
+
+    <p class="measure text-body text-ink-muted" data-reveal>
+      {SOBRE.texto}
+    </p>
+
+    <div class="rule mt-10 pt-8" data-reveal style="--reveal-delay: 60ms">
+      <p class="text-h3 text-ink">{SOBRE.pessoa.nome}</p>
+      <p class="readout mt-1">{SOBRE.pessoa.cargo}</p>
+
+      <p class="measure mt-5 text-body-sm text-ink-muted">
+        {SOBRE.pessoa.texto}
+      </p>
+    </div>
+
+    <dl class="rule mt-10 grid grid-cols-2 gap-8 pt-8 sm:max-w-md">
+      <div>
+        <dt class="readout">Laboratório</dt>
+        <dd class="mt-2 text-body-sm text-ink">{NEGOCIO.localizacao}</dd>
+      </div>
+      <div>
+        <dt class="readout">Atendimento</dt>
+        <dd class="mt-2 text-body-sm text-ink">{NEGOCIO.atendimento}</dd>
+      </div>
+    </dl>
+  </div>
+
+  <div data-reveal style="--reveal-delay: 100ms">
+    {
+      foto ? (
+        <Picture
+          src={foto}
+          alt={SOBRE.pessoa.fotoAlt}
+          formats={['avif', 'webp']}
+          widths={[400, 560, 780]}
+          sizes="(min-width: 1024px) 38vw, 92vw"
+          loading="lazy"
+          class="w-full rounded-[14px] object-cover"
+          style={`aspect-ratio: ${proporcao};`}
+        />
+      ) : (
+        <MediaPlaceholder
+          label="XXX-FOTO-ANDRE"
+          ratio={proporcao}
+          nota="Foto do André Nascimento. Solte o arquivo em src/assets/lab/ — o slot se ajusta à proporção dele."
+        />
+      )
+    }
+  </div>
+</div>

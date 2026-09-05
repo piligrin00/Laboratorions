@@ -1,0 +1,37 @@
+---
+/**
+ * Cabeçalho de seção: H2 em serifa de peso regular, alinhado à
+ * esquerda, com texto de apoio abaixo numa medida curta.
+ *
+ * ALINHADO À ESQUERDA SEMPRE. Só o herói e o manifesto de fechamento
+ * são centralizados na página inteira, e são os dois extremos dela.
+ * Centralizar tudo é o tique visual número um de site gerado.
+ *
+ * SEM sobretítulo em caixa-alta acima do H2. O título já diz o que é.
+ */
+interface Props {
+  titulo: string;
+  /** Texto de apoio. Fica numa medida de 620px, não na largura toda. */
+  apoio?: string;
+  /** Espaço abaixo do bloco, antes do conteúdo da seção. */
+  class?: string;
+}
+
+const { titulo, apoio, class: className = '' } = Astro.props;
+---
+
+<div class:list={['max-w-[840px]', className]}>
+  <h2 class="text-h2 text-ink" data-reveal>{titulo}</h2>
+
+  {
+    apoio && (
+      <p
+        class="measure mt-6 text-body-sm text-ink-muted"
+        data-reveal
+        style="--reveal-delay: 70ms"
+      >
+        {apoio}
+      </p>
+    )
+  }
+</div>

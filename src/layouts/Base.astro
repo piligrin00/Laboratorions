@@ -1,0 +1,228 @@
+---
+import '../styles/global.css';
+import { NEGOCIO, SITE_URL, SEO, AREA_ATENDIMENTO } from '../data/site';
+import Analytics from '../components/Analytics.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import WhatsappFab from '../components/WhatsappFab.astro';
+import MobileCtaBar from '../components/MobileCtaBar.astro';
+
+interface Props {
+  titulo?: string;
+  descricao?: string;
+}
+
+const { titulo = SEO.titulo, descricao = SEO.descricao } = Astro.props;
+
+/**
+ * O dominio ainda nao foi registrado (XXX-DOMINIO em src/data/site.ts).
+ * Sem ele nao existe URL absoluta honesta, entao canonical e og:url
+ * ficam de fora em vez de apontar para um dominio inventado.
+ */
+const canonical = SITE_URL ? new URL('/', SITE_URL).href : null;
+const ogImage = SITE_URL ? new URL(SEO.ogImage, SITE_URL).href : SEO.ogImage;
+
+/**
+ * JSON-LD LocalBusiness. Deliberadamente SEM:
+ *   streetAddress  o endereco completo nao e publico
+ *   openingHours   nao existe horario definido
+ *   priceRange     nao existe tabela de precos
+ * Declarar qualquer um deles seria inventar dado. Ver PRODUCT.md.
+ */
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'MedicalBusiness',
+  additionalType: 'https://schema.org/ProfessionalService',
+  name: NEGOCIO.nome,
+  description: SEO.descricao,
+  telephone: NEGOCIO.whatsappE164,
+  email: NEGOCIO.email,
+  image: ogImage,
+  ...(canonical ? { url: canonical } : {}),
+  sameAs: [NEGOCIO.instagram],
+  foundingDate: String(NEGOCIO.desde),
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: NEGOCIO.bairro,
+    addressRegion: NEGOCIO.estado,
+    addressCountry: 'BR',
+  },
+  areaServed: AREA_ATENDIMENTO.bairros.map((bairro) => ({
+    '@type': 'Place',
+    name: `${bairro}, ${NEGOCIO.cidade}, ${NEGOCIO.estado}`,
+  })),
+  knowsAbout: [
+    'Prótese dentária digital',
+    'Zircônia',
+    'CAD/CAM odontológico',
+    'Lentes de contato dental',
+    'Protocolo sobre implante',
+  ],
+};
+---
+
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{titulo}</title>
+    <meta name="description" content={descricao} />
+    {canonical && <link rel="canonical" href={canonical} />}
+
+    {/* O logo da marca e um PNG com fundo transparente e o "N" claro.
+        Todos os icones sao gerados achatados sobre #0C1014 (npm run
+        icons): sem esse fundo, o N desaparece numa aba de tema claro. */}
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta name="theme-color" content="#0C1014" />
+
+    {/* Marca `js` no <html>, escrita ANTES da primeira pintura.
+        As animacoes de entrada escondem o conteudo (opacity: 0) e
+        contam com o JS para revela-lo. Sem esta marca, um JS que nao
+        carrega (rede ruim, extensao bloqueando, script com erro)
+        deixaria a pagina inteira invisivel. Com ela, o estado escondido
+        so existe quando ha JS para desfaze-lo. */}
+    <script is:inline>
+      document.documentElement.classList.add('js');
+    </script>
+
+    {/* Preload so da serifa do H1: ela pinta o maior elemento de texto
+        da dobra. O corpo carrega no fluxo normal do CSS. */}
+    <link
+      rel="preload"
+      href="/fonts/newsreader-latin-var.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={NEGOCIO.nome} />
+    <meta property="og:title" content={titulo} />
+    <meta property="og:description" content={descricao} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="pt_BR" />
+    {canonical && <meta property="og:url" content={canonical} />}
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={titulo} />
+    <meta name="twitter:description" content={descricao} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+    <Analytics />
+  </head>
+
+  <body class="bg-surface text-ink antialiased">
+    <!--
+      DIRECTION CONTRACT
+      THESIS: a stack of hard-edged full-bleed bands, dark then light then
+      dark, read as a printed dossier; it refuses the single dark scroll
+      with a glowing accent that this category generates by default.
+      OWN-WORLD: #0C1014 and #F2F4F0 alternating with no transition
+      gradient, closing on #E4EDE0 mint; Newsreader at 400 for every
+      heading, never bold, never sans; IBM Plex Sans body at 15-16px with
+      wide air; system mono only where a number is measured; flat surfaces,
+      1px hairlines, zero shadow, zero glow, zero blur; green is #70C81A on
+      dark and #3A6F0B on light, and only ever an accent.
+      STORY: a dentist in any of three workflows (analog mold, wanting to
+      migrate, already scanning) reads that the digital park is the lab's
+      infrastructure, not a prerequisite, picks the door that matches how
+      he works today, and opens WhatsApp.
+      FIRST VIEWPORT: centred serif H1 over a short sans line, two CTAs,
+      and four badges, no photo. Every other heading on the page is
+      left-aligned, including the "three doors" section right after it.
+      FORM: banded editorial dossier, pinned by the client's revision and
+      repositioning documents over seed e9d1026a.
+      FINISH: unreviewed and undocumented is unfinished; this build ends
+      with the finish review, the verdict, DESIGN.md, and every shipping
+      raster carrying its provenance
+    -->
+
+    <a
+      href="#conteudo"
+      class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-accent focus:px-4 focus:py-2 focus:font-medium focus:text-surface"
+    >
+      Pular para o conteúdo
+    </a>
+
+    <Header />
+
+    <main id="conteudo">
+      <slot />
+    </main>
+
+    <Footer />
+
+    <WhatsappFab />
+    <MobileCtaBar />
+
+    <script>
+      /* ---------------------------------------------------------------
+         1. Animacao de entrada: fade + slide-up de 16px ao entrar na
+            viewport. IntersectionObserver nativo, sem biblioteca.
+         --------------------------------------------------------------- */
+      const reduzirMovimento = window.matchMedia(
+        '(prefers-reduced-motion: reduce)',
+      ).matches;
+
+      const alvos = document.querySelectorAll<HTMLElement>('[data-reveal]');
+
+      if (reduzirMovimento) {
+        alvos.forEach((el) => el.setAttribute('data-reveal', 'in'));
+      } else if ('IntersectionObserver' in window) {
+        /* Qualquer coisa que JA esteja na viewport na inicializacao e
+           revelada de forma sincrona, sem esperar o observer: em telas
+           altas parte da segunda secao ja aparece na primeira pintura, e
+           esperar o primeiro frame do observer piscaria conteudo. */
+        for (const el of alvos) {
+          const caixa = el.getBoundingClientRect();
+          if (caixa.top < window.innerHeight && caixa.bottom > 0) {
+            el.setAttribute('data-reveal', 'in');
+          }
+        }
+
+        const observer = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              if (!entry.isIntersecting) continue;
+              const el = entry.target as HTMLElement;
+              el.setAttribute('data-reveal', 'in');
+              observer.unobserve(el);
+            }
+          },
+          { rootMargin: '0px 0px -12% 0px', threshold: 0.05 },
+        );
+
+        alvos.forEach((el) => {
+          if (el.getAttribute('data-reveal') !== 'in') observer.observe(el);
+        });
+      } else {
+        alvos.forEach((el) => el.setAttribute('data-reveal', 'in'));
+      }
+
+      /* ---------------------------------------------------------------
+         2. Tracking dos CTAs: um listener delegado para os pontos de
+            conversao. Sob guard, porque com .env vazio nao existe
+            dataLayer consumidor nem fbq, e nada pode quebrar.
+         --------------------------------------------------------------- */
+      document.addEventListener('click', (evento) => {
+        const alvo = (evento.target as HTMLElement | null)?.closest<HTMLElement>(
+          '[data-wa]',
+        );
+        if (!alvo) return;
+
+        const origem = alvo.dataset.wa;
+        if (!origem) return;
+
+        window.dataLayer?.push({ event: 'whatsapp_click', origem });
+        window.fbq?.('track', 'Contact', { origem });
+      });
+    </script>
+  </body>
+</html>

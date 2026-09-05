@@ -1,0 +1,137 @@
+---
+import { PASSOS, VIDEO_PROCESSO } from '../../data/site';
+import Cabecalho from '../Cabecalho.astro';
+import CtaButton from '../CtaButton.astro';
+import VideoFacade from '../VideoFacade.astro';
+import MediaPlaceholder from '../MediaPlaceholder.astro';
+
+/**
+ * Como funciona, na faixa clara.
+ *
+ * O VÍDEO SOBE ATÉ O TOPO DA SEÇÃO, ao lado do título e não abaixo
+ * dele. Antes ele começava alinhado com a primeira etapa, e a coluna
+ * da direita nascia com 329px medidos de espaço vazio acima do quadro.
+ * O título é curto em largura e a faixa é larga: aquele vão não estava
+ * fazendo nada. Por isso a grade coloca três itens explicitamente —
+ * título e etapas na coluna 1, vídeo na coluna 2 atravessando as duas
+ * linhas.
+ *
+ * A ORDEM NO DOM É título, vídeo, etapas, e isso é a versão de celular
+ * mandando. Numa coluna só, o dentista lê o título e encontra o vídeo
+ * na hora; se o vídeo viesse depois das cinco etapas ele estaria a
+ * quase mil pixels de rolagem do título, e ninguém desce até lá para
+ * descobrir que havia um vídeo. Nada de `order` invertendo o visual:
+ * a ordem de leitura e a ordem visual são a mesma nos dois tamanhos,
+ * porque no desktop quem posiciona é `col-start`/`row-start`.
+ *
+ * A LARGURA DO QUADRO É LIMITADA NO CELULAR. Um 9:16 na largura cheia
+ * de um telefone dá 622px de altura medidos, um terço da seção inteira
+ * gasto num pôster parado. Em 240px ele fica em 427px, que é a cara de
+ * um card de vídeo vertical e devolve quase 200px de rolagem. Ninguém
+ * decide nada olhando o pôster: a decisão vem de assistir, e para
+ * assistir basta o play estar visível e alcançável.
+ *
+ * A coluna do vídeo é `sticky` no desktop: as cinco etapas são altas, e
+ * sem isso o vídeo sumiria da tela na terceira.
+ *
+ * A FICHA DE PRAZOS SAIU DA PÁGINA, por decisão do cliente. Os dados
+ * continuam em `FICHA_PRAZOS` (src/data/site.ts) e as três pendências
+ * de preço/prazo que ela carregava seguem rastreadas na tabela de
+ * pendências do README, então nada foi perdido — só não é renderizado.
+ * O prazo de 5 dias úteis continua dito no subtítulo do herói, na
+ * quinta etapa abaixo e no selo da Área de Atendimento.
+ *
+ * A TRANSCRIÇÃO também saiu deste estado. Sem vídeo no ar, ela era um
+ * bloco de texto falado sobre um espaço vazio. Quando o mp4 chegar, o
+ * `VideoFacade` volta a renderizar a transcrição junto do player, que é
+ * onde ela tem função.
+ *
+ * O que sobra depois das etapas é UM caminho: o botão do WhatsApp.
+ *
+ * O rótulo de cada etapa é `<dt>` e a descrição é `<dd>`: a separação
+ * é estrutural, não um travessão fazendo o trabalho da marcação.
+ */
+
+/* Mesmo padrão do resto do site: o poster mandado para a pasta é o que
+   liga o vídeo. Enquanto ele não existir, o espaço aparece marcado com
+   a medida final, e a troca depois não move nada. O poster só existe se
+   tiver sido extraído do mp4, então a presença dele é prova de que o
+   vídeo chegou. */
+const posters = import.meta.glob<{ default: ImageMetadata }>(
+  '../../assets/video/*.{jpg,jpeg,png,webp,avif}',
+  { eager: true },
+);
+const poster = Object.values(posters)[0]?.default ?? null;
+---
+
+<div
+  class="grid gap-10 lg:grid-cols-[1fr_280px] lg:items-start lg:gap-x-16 lg:gap-y-12"
+>
+  <Cabecalho
+    titulo="São cinco etapas entre o arquivo que você manda e a peça no consultório."
+    apoio="Nenhuma delas é analógica e nenhuma sai daqui. Você acompanha o caso do planejamento até a conferência final."
+    class="lg:col-start-1 lg:row-start-1"
+  />
+
+  {/* --- Vídeo do processo -------------------------------------------
+      `row-start-1 row-end-3`, NÃO `row-span-2`: a utilitária de span do
+      Tailwind emite `grid-row: span 2 / span 2`, e isso reescreve o
+      `grid-row-start` que a de row-start tinha posto. O resultado era o
+      vídeo caindo na linha 2 — medido: começava 278px abaixo do título,
+      exatamente o vão que esta mudança existe para eliminar. */}
+  <div
+    class="max-w-[240px] sm:max-w-[280px] lg:sticky lg:top-24 lg:col-start-2 lg:row-start-1 lg:row-end-3 lg:max-w-none"
+    data-reveal
+    style="--reveal-delay: 120ms"
+  >
+    {
+      poster ? (
+        <VideoFacade
+          src={VIDEO_PROCESSO.src}
+          poster={poster}
+          posterAlt={VIDEO_PROCESSO.posterAlt}
+          ariaLabel={VIDEO_PROCESSO.ariaLabel}
+          legenda={VIDEO_PROCESSO.legenda}
+          proporcao={VIDEO_PROCESSO.proporcao}
+          transcricao={VIDEO_PROCESSO.transcricao}
+        />
+      ) : (
+        <MediaPlaceholder
+          label="XXX-VIDEO-PROCESSO"
+          ratio={VIDEO_PROCESSO.proporcao}
+          nota="Vídeo vertical do escaneamento no consultório. mp4 em public/video/, poster em src/assets/video/."
+        />
+      )
+    }
+  </div>
+
+  <ol class="contents lg:col-start-1 lg:row-start-2 lg:block">
+    {
+      PASSOS.map((passo, i) => (
+        <li
+          class="rule flex gap-6 py-6 first:border-t-0 first:pt-0 lg:py-7"
+          data-reveal
+          style={`--reveal-delay: ${i * 70}ms`}
+        >
+          <span class="numeral shrink-0 text-lg leading-tight" aria-hidden="true">
+            {String(i + 1).padStart(2, '0')}
+          </span>
+          <div>
+            <h3 class="text-h3 text-ink">{passo.titulo}</h3>
+            <p class="measure mt-2 text-body-sm text-ink-muted">
+              {passo.descricao}
+            </p>
+          </div>
+        </li>
+      ))
+    }
+  </ol>
+</div>
+
+<div class="mt-12" data-reveal>
+  <CtaButton
+    context="fluxoDigital"
+    variant="solida"
+    label="Mandar meu primeiro caso"
+  />
+</div>

@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+# A linha Sitemap abaixo so vale depois que o dominio for registrado
+# e o SITE_URL for preenchido em src/data/site.ts.
+# Descomente e ajuste o dominio:
+# Sitemap: https://XXX-DOMINIO.com.br/sitemap-index.xml

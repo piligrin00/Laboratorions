@@ -1,0 +1,345 @@
+---
+import { casos, totalCasosEnviados, tiposComCasos } from '../data/casos';
+import MediaPlaceholder from './MediaPlaceholder.astro';
+import { Picture, getImage } from 'astro:assets';
+import { Icon } from 'astro-icon/components';
+
+/**
+ * Galeria de casos com filtro por material, e lightbox nativo.
+ *
+ * ================= FORA DA PAGINA =================
+ * NAO ESTA SENDO RENDERIZADA. O cliente decidiu nao publicar fotos de
+ * trabalho, e o componente foi desimportado de Avaliacoes.astro (a
+ * antiga secao "Casos").
+ *
+ * Nao foi apagado porque nada aqui e provisorio: o filtro por material,
+ * o lightbox nativo com teclado e o carrossel de scroll-snap ja estao
+ * prontos e testados. Se as fotos vierem, e soltar os arquivos em
+ * src/assets/casos/ e reimportar este componente.
+ *
+ * Componente nao importado nao entra no build: manter isto aqui nao
+ * custa um byte na pagina.
+ * ==================================================
+ *
+ * SEIS CARDS IGUAIS, 4:5.
+ *
+ * NO CELULAR É UM CARROSSEL, no desktop é grade. Não é indecisão: são
+ * dois problemas diferentes. Em 390px, seis fotos em grade de duas
+ * colunas dão miniaturas de 169px — pequenas demais para olhar
+ * adaptação, que é a única razão desta seção existir. Em faixa
+ * horizontal a mesma foto ocupa 72vw, quatro vezes a área, e o polegar
+ * já sabe o que fazer com ela.
+ *
+ * No desktop o carrossel seria pior: a faixa tem 1136px de largura e
+ * esconder metade dos seis casos atrás de um arrasto desperdiça o
+ * espaço que já existe. Grade de 3x2 mostra tudo de uma vez.
+ *
+ * SCROLL-SNAP NATIVO, sem biblioteca e sem JavaScript. O arrasto, a
+ * inércia e o encaixe são do navegador. Isso importa aqui: a página
+ * inteira funciona sem JS, e um carrossel de biblioteca seria o único
+ * lugar que quebraria — justamente na seção que é a prova do trabalho.
+ *
+ * O CARD PARCIAL NA BORDA é a affordance. Com 72vw de largura, sobra um
+ * pedaço do próximo caso aparecendo à direita, e é isso que diz "tem
+ * mais" sem precisar de seta, ponto ou instrução escrita.
+ *
+ * TECLADO: cada caso é um `<button>` de verdade, então o Tab percorre
+ * os seis e o navegador rola cada um para dentro da vista sozinho. A
+ * faixa também é uma `region` rotulada, para quem navega por marcos.
+ *
+ * A grade fecha exata em qualquer largura: 6 divide por 2 e por 3,
+ * então nem 2 colunas nem 3 deixam card órfão na última fileira.
+ *
+ * FILTRO: CSS + `data-tipo`, sem framework. Marcar um filtro esconde os
+ * cards que não batem e reordena nada: a posição de cada caso é estável,
+ * o que evita o salto visual de uma grade que se remonta.
+ *
+ * LIGHTBOX: `<dialog>` nativo. O trap de foco e o ESC vêm do navegador,
+ * não de biblioteca. As setas navegam só entre os casos VISÍVEIS no
+ * filtro ativo, porque navegar para um card escondido seria confuso.
+ */
+const grandes = await Promise.all(
+  casos.map(async (caso) =>
+    caso.imagem
+      ? (await getImage({ src: caso.imagem, width: 1400, format: 'webp' })).src
+      : null,
+  ),
+);
+
+const temFiltro = totalCasosEnviados > 0 && tiposComCasos.length > 2;
+---
+
+{
+  temFiltro && (
+    <div
+      class="rule mb-10 flex flex-wrap items-center gap-x-7 gap-y-3 pt-6"
+      role="group"
+      aria-label="Filtrar casos por material"
+    >
+      {tiposComCasos.map((tipo, i) => (
+        <button
+          type="button"
+          data-filtro={tipo.id}
+          aria-pressed={i === 0 ? 'true' : 'false'}
+          class="filtro inline-flex min-h-11 items-center gap-2 text-caption text-ink-muted transition-colors duration-200 hover:text-ink"
+        >
+          <Icon name="lucide:check" class="size-3.5 shrink-0 opacity-0 transition-opacity duration-200" />
+          {tipo.label}
+        </button>
+      ))}
+    </div>
+  )
+}
+
+<div
+  class="galeria-faixa -mx-5 flex snap-x snap-mandatory gap-3 overflow-x-auto px-5 pb-2 sm:mx-0 sm:px-0 lg:grid lg:grid-cols-3 lg:gap-5 lg:overflow-visible lg:pb-0"
+  data-galeria
+  role="region"
+  aria-label="Casos entregues"
+  tabindex="0"
+>
+  {
+    casos.map((caso, i) => {
+      if (!caso.imagem) {
+        return (
+          <MediaPlaceholder
+            label={caso.placeholder}
+            ratio="4/5"
+            class="w-[72vw] shrink-0 snap-start sm:w-[46vw] lg:w-auto"
+          />
+        );
+      }
+
+      return (
+        <button
+          type="button"
+          class="group relative aspect-[4/5] w-[72vw] shrink-0 snap-start overflow-hidden rounded-[14px] transition duration-250 ease-out sm:w-[46vw] lg:w-auto"
+          style={`--reveal-delay: ${i * 40}ms;`}
+          data-caso={i}
+          data-tipo={caso.tipo}
+          data-full={grandes[i]}
+          data-alt={caso.alt}
+          data-legenda={caso.legenda ?? ''}
+          aria-label={`Ampliar: ${caso.alt}`}
+          data-reveal
+        >
+          <Picture
+            src={caso.imagem}
+            alt={caso.alt}
+            formats={['avif', 'webp']}
+            widths={[180, 280, 400, 560, 780]}
+            sizes="(min-width: 1280px) 390px, (min-width: 1024px) 30vw, (min-width: 640px) 46vw, 72vw"
+            loading={i < 2 ? 'eager' : 'lazy'}
+            class="size-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02]"
+          />
+
+          {caso.legenda && (
+            <span class="readout pointer-events-none absolute bottom-3 left-3 rounded-full border border-hairline bg-surface px-2.5 py-1 text-ink">
+              {caso.legenda}
+            </span>
+          )}
+        </button>
+      );
+    })
+  }
+</div>
+
+
+
+{
+  /* `m-auto` é obrigatório: o <dialog> nativo se centraliza na viewport
+     por `margin: auto`, e o reset do Tailwind zera as margens de todos
+     os elementos. Sem ele o lightbox abre encostado no canto. */
+  totalCasosEnviados > 0 && (
+    <dialog
+      data-lightbox
+      aria-label="Caso ampliado"
+      class="m-auto max-h-[92vh] max-w-[min(92vw,1100px)] rounded-[14px] border border-hairline bg-surface p-0 backdrop:bg-black/85"
+    >
+      <div class="relative">
+        <img
+          data-lightbox-img
+          src=""
+          alt=""
+          class="max-h-[76vh] w-full rounded-t-[14px] object-contain"
+        />
+
+        <p
+          data-lightbox-legenda
+          class="min-h-[1.5rem] px-6 py-5 text-caption text-ink-muted"
+        />
+
+        <button
+          type="button"
+          data-lightbox-fechar
+          aria-label="Fechar"
+          class="absolute right-3 top-3 grid size-11 place-items-center rounded-full border border-hairline bg-surface text-ink transition-colors duration-200 hover:bg-surface-hover"
+        >
+          <Icon name="lucide:x" class="size-5" />
+        </button>
+
+        <div class="absolute inset-y-0 left-3 grid place-items-center">
+          <button
+            type="button"
+            data-lightbox-anterior
+            aria-label="Caso anterior"
+            class="grid size-11 place-items-center rounded-full border border-hairline bg-surface text-ink transition-colors duration-200 hover:bg-surface-hover"
+          >
+            <Icon name="lucide:chevron-left" class="size-5" />
+          </button>
+        </div>
+
+        <div class="absolute inset-y-0 right-3 grid place-items-center">
+          <button
+            type="button"
+            data-lightbox-proximo
+            aria-label="Próximo caso"
+            class="grid size-11 place-items-center rounded-full border border-hairline bg-surface text-ink transition-colors duration-200 hover:bg-surface-hover"
+          >
+            <Icon name="lucide:chevron-right" class="size-5" />
+          </button>
+        </div>
+      </div>
+    </dialog>
+  )
+}
+
+<style>
+  /* A barra de rolagem some no celular: o card parcial na borda já diz
+     que tem mais, e uma barra fina atravessada embaixo das fotos rouba
+     atencao da unica coisa que essa secao tem para mostrar. */
+  .galeria-faixa {
+    scrollbar-width: none;
+  }
+
+  .galeria-faixa::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* O foco do teclado precisa aparecer: a faixa e focavel por tabindex,
+     e sem isto quem navega por teclado nao saberia onde esta. */
+  .galeria-faixa:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 4px;
+  }
+
+  /* Filtro ativo: o check aparece e o rótulo assume a cor do texto. */
+  .filtro[aria-pressed='true'] {
+    color: var(--color-ink);
+  }
+
+  .filtro[aria-pressed='true'] [data-icon] {
+    opacity: 1;
+    color: var(--color-accent);
+  }
+
+  /* Card fora do filtro ativo. Some do layout, não só da vista: um card
+     invisível ocupando espaço deixaria buracos na grade. */
+  [data-caso][hidden] {
+    display: none;
+  }
+</style>
+
+<script>
+  /* ---------------------------------------------------------------
+     Filtro por material.
+     --------------------------------------------------------------- */
+  const botoes = Array.from(
+    document.querySelectorAll<HTMLButtonElement>('[data-filtro]'),
+  );
+  const cards = Array.from(
+    document.querySelectorAll<HTMLButtonElement>('[data-caso]'),
+  );
+
+  const aplicar = (tipo: string) => {
+    for (const card of cards) {
+      card.hidden = tipo !== 'todos' && card.dataset.tipo !== tipo;
+    }
+    for (const botao of botoes) {
+      botao.setAttribute(
+        'aria-pressed',
+        botao.dataset.filtro === tipo ? 'true' : 'false',
+      );
+    }
+  };
+
+  for (const botao of botoes) {
+    botao.addEventListener('click', () => aplicar(botao.dataset.filtro ?? 'todos'));
+  }
+
+  /* ---------------------------------------------------------------
+     Lightbox.
+     --------------------------------------------------------------- */
+  const dialogo = document.querySelector<HTMLDialogElement>('[data-lightbox]');
+
+  if (dialogo) {
+    const img = dialogo.querySelector<HTMLImageElement>('[data-lightbox-img]')!;
+    const legenda = dialogo.querySelector<HTMLElement>(
+      '[data-lightbox-legenda]',
+    )!;
+    const btnFechar = dialogo.querySelector<HTMLButtonElement>(
+      '[data-lightbox-fechar]',
+    )!;
+    const btnAnterior = dialogo.querySelector<HTMLButtonElement>(
+      '[data-lightbox-anterior]',
+    )!;
+    const btnProximo = dialogo.querySelector<HTMLButtonElement>(
+      '[data-lightbox-proximo]',
+    )!;
+
+    let atual: HTMLButtonElement | null = null;
+
+    /** Só os cards visíveis no filtro ativo entram na navegação. */
+    const visiveis = () => cards.filter((c) => !c.hidden);
+
+    const mostrar = (card: HTMLButtonElement) => {
+      atual = card;
+      img.src = card.dataset.full ?? '';
+      img.alt = card.dataset.alt ?? '';
+      legenda.textContent = card.dataset.legenda || '';
+
+      const navegavel = visiveis().length > 1;
+      btnAnterior.hidden = !navegavel;
+      btnProximo.hidden = !navegavel;
+    };
+
+    const andar = (passo: number) => {
+      const lista = visiveis();
+      if (!atual || lista.length === 0) return;
+      const i = lista.indexOf(atual);
+      mostrar(lista[(i + passo + lista.length) % lista.length]!);
+    };
+
+    for (const card of cards) {
+      card.addEventListener('click', () => {
+        mostrar(card);
+        dialogo.showModal();
+        btnFechar.focus();
+      });
+    }
+
+    btnFechar.addEventListener('click', () => dialogo.close());
+    btnAnterior.addEventListener('click', () => andar(-1));
+    btnProximo.addEventListener('click', () => andar(1));
+
+    /* Setas navegam. O ESC já é nativo do <dialog>. */
+    dialogo.addEventListener('keydown', (evento) => {
+      if (evento.key === 'ArrowLeft') {
+        evento.preventDefault();
+        andar(-1);
+      } else if (evento.key === 'ArrowRight') {
+        evento.preventDefault();
+        andar(1);
+      }
+    });
+
+    /* Clique no backdrop fecha. O <dialog> não distingue backdrop de
+       conteúdo, então comparamos o alvo com o próprio diálogo. */
+    dialogo.addEventListener('click', (evento) => {
+      if (evento.target === dialogo) dialogo.close();
+    });
+
+    /* Devolve o foco para a miniatura de origem ao fechar. */
+    dialogo.addEventListener('close', () => atual?.focus());
+  }
+</script>

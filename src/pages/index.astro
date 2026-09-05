@@ -1,0 +1,90 @@
+---
+import Base from '../layouts/Base.astro';
+import Band from '../components/Band.astro';
+import Hero from '../components/sections/Hero.astro';
+import Credibilidade from '../components/sections/Credibilidade.astro';
+import PorOndeEntra from '../components/sections/PorOndeEntra.astro';
+import Servicos from '../components/sections/Servicos.astro';
+import ComoFunciona from '../components/sections/ComoFunciona.astro';
+import Tecnologia from '../components/sections/Tecnologia.astro';
+import Diferenciais from '../components/sections/Diferenciais.astro';
+import Avaliacoes from '../components/sections/Avaliacoes.astro';
+import Sobre from '../components/sections/Sobre.astro';
+import AreaAtendimento from '../components/sections/AreaAtendimento.astro';
+import CtaFinal from '../components/sections/CtaFinal.astro';
+---
+
+<Base>
+  {/* --------------------------------------------------------------------
+      RITMO DE FAIXAS
+
+      A pagina e uma pilha de sete faixas full-bleed, com borda dura
+      entre elas e nenhum gradiente de transicao. Abre e fecha escuro,
+      entao o site le como escuro; as faixas claras existem para dar
+      respiro e para a prótese fotografada respirar, porque ela aparece
+      melhor sobre fundo claro.
+
+      O `respiro` de cada faixa e deliberadamente irregular. Ritmo
+      perfeitamente regular parece planilha: a faixa de avaliacoes tem
+      mais ar porque e a mais importante, a de credibilidade tem menos porque
+      e uma leitura rapida.
+      ----------------------------------------------------------------- */}
+
+  {/* 1 */}
+  <Band tom="escuro" id="top" respiro="hero">
+    <Hero />
+    {/* A colagem do herói ocupava este espaço. Sem ela, os CTAs
+        encostavam na régua da faixa de leituras. */}
+    <div class="mt-12 lg:mt-16">
+      <Credibilidade />
+    </div>
+  </Band>
+
+  {/* 2 */}
+  <Band tom="claro" id="portas">
+    <PorOndeEntra />
+    {/* id="servicos" fica no wrapper, nao na faixa: a faixa agora
+        comeca com Portas, e o link de nav "Servicos" precisa continuar
+        apontando para o titulo de Servicos, nao para o topo da faixa. */}
+    <div class="mt-14 lg:mt-20" id="servicos">
+      <Servicos />
+    </div>
+    <div class="mt-14 lg:mt-20" id="como-funciona">
+      <ComoFunciona />
+    </div>
+  </Band>
+
+  {/* 3 */}
+  <Band tom="escuro" id="tecnologia">
+    <Tecnologia />
+    <div class="mt-14 lg:mt-20">
+      <Diferenciais />
+    </div>
+  </Band>
+
+  {/* 4 */}
+  {/* 4 — Era a faixa de casos, com a galeria de fotos de trabalho. O
+       cliente decidiu nao publicar as fotos, entao sobrou a prova
+       social: nota do Google e tres avaliacoes. */}
+  <Band tom="claro" id="avaliacoes" respiro="longo">
+    <Avaliacoes />
+  </Band>
+
+  {/* 5 */}
+  <Band tom="escuro" id="sobre">
+    <Sobre />
+    <div class="mt-14 lg:mt-20" id="area">
+      <AreaAtendimento />
+    </div>
+  </Band>
+
+  {/* 6 — a faixa fecha no CTA e mais nada. Havia aqui um manifesto em
+       serifa grande, proposta minha que o cliente reprovou. Nada tomou
+       o lugar dele de proposito: a ultima coisa antes do rodape ser o
+       botao do WhatsApp e mais forte que ser uma frase de efeito. */}
+  <Band tom="menta" id="contato">
+    <CtaFinal />
+  </Band>
+
+  {/* 7: o rodape e a setima faixa, e vem de Base.astro. */}
+</Base>

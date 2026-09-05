@@ -1,0 +1,53 @@
+---
+import { SERVICOS } from '../../data/site';
+import Cabecalho from '../Cabecalho.astro';
+import CtaButton from '../CtaButton.astro';
+
+/**
+ * Servicos, na faixa clara.
+ *
+ * SEM ICONE. Icone em circulo no topo de tres cards identicos e item da
+ * lista negra. Cada card abre com uma leitura de dado (o material ou a
+ * tecnica que ele resolve), que e informacao e nao enfeite.
+ *
+ * Os cards nao tem o mesmo numero de linhas de proposito: paralelismo
+ * perfeito entre cards e um dos sinais mais confiaveis de texto gerado.
+ */
+---
+
+<Cabecalho
+  titulo="Quatro frentes, um só fluxo digital."
+  apoio="Cada caso entra pelo mesmo caminho: escaneamento, planejamento em CAD, produção no parque próprio e conferência peça por peça."
+  class="mb-14"
+/>
+
+{/* 2x2 em vez de 3 colunas: com quatro cards de comprimento
+    deliberadamente desigual, quatro colunas na mesma largura espremeria
+    o texto mais longo. */}
+<div class="grid gap-px overflow-hidden rounded-[14px] border border-hairline bg-hairline sm:grid-cols-2">
+  {
+    SERVICOS.map((servico, i) => (
+      <article
+        class="flex flex-col bg-surface-raised p-7 lg:p-8"
+        data-reveal
+        style={`--reveal-delay: ${i * 80}ms`}
+      >
+        <p class="readout">{servico.rotulo}</p>
+
+        <h3 class="mt-4 text-h3 text-ink">{servico.titulo}</h3>
+
+        <p class="mt-4 flex-1 text-body-sm text-ink-muted">
+          {servico.descricao}
+        </p>
+
+        <div class="mt-7">
+          <CtaButton
+            context={servico.contexto}
+            variant="texto"
+            label={('ctaLabel' in servico && servico.ctaLabel) || 'Falar sobre isso'}
+          />
+        </div>
+      </article>
+    ))
+  }
+</div>

@@ -1,0 +1,58 @@
+---
+import { PORTAS } from '../../data/site';
+import Cabecalho from '../Cabecalho.astro';
+import CtaButton from '../CtaButton.astro';
+
+/**
+ * "Por onde você entra" — a seção mais importante do site
+ * (docs/REPOSICIONAMENTO.md). Mostra que o laboratório atende o
+ * dentista analógico, o que quer migrar e o que já escaneia, não só o
+ * último.
+ *
+ * A porta 2 (migração) é a prioridade comercial. O destaque é SÓ de
+ * fundo/borda: sem selo, sem badge, sem escala maior. Reaproveita os
+ * tokens já existentes (`surface-mint`, `accent-on-light`) em vez de
+ * introduzir cor nova.
+ *
+ * Mesma grade com divisor de 1px dos Serviços, para as duas seções
+ * lerem como parte do mesmo sistema.
+ */
+---
+
+{/* Título aprovado literalmente (docs/REPOSICIONAMENTO.md): o "para
+    começar" sustenta a promessa de transformação do hero sem contradizer
+    a promessa de entrada sem atrito. Não cortar. */}
+<Cabecalho
+  titulo="Atendemos três tipos de dentista. Nenhum precisou mudar nada para começar."
+  class="mb-14"
+/>
+
+<div class="grid gap-px overflow-hidden rounded-[14px] border border-hairline bg-hairline lg:grid-cols-3">
+  {
+    PORTAS.map((porta, i) => (
+      <article
+        class:list={[
+          'flex flex-col p-7 lg:p-8',
+          porta.destaque
+            ? 'border-2 border-accent bg-surface-mint'
+            : 'bg-surface-raised',
+        ]}
+        data-reveal
+        style={`--reveal-delay: ${i * 80}ms`}
+      >
+        <p class="readout">{porta.rotulo}</p>
+
+        <p class="mt-4 flex-1 text-body-sm text-ink-muted">{porta.texto}</p>
+
+        <div class="mt-7">
+          <CtaButton
+            context={porta.contexto}
+            variant="fantasma"
+            label={porta.ctaLabel}
+            icone={false}
+          />
+        </div>
+      </article>
+    ))
+  }
+</div>

@@ -1,0 +1,55 @@
+---
+/**
+ * Uma faixa da página.
+ *
+ * A página é uma pilha de faixas full-bleed com BORDA DURA entre elas.
+ * Nunca há gradiente de transição: a mudança de fundo é a divisão.
+ *
+ * Abre e fecha escuro, então o site lê como escuro. As faixas claras
+ * existem para dar respiro e para as fotos de trabalho respirarem:
+ * prótese fotografada aparece melhor sobre fundo claro.
+ *
+ * A faixa clara redefine as variáveis de cor (ver `.band-light` em
+ * global.css), então nenhuma seção precisa saber em que faixa está:
+ * `text-ink`, `text-accent`, `border-hairline` e `bg-surface-raised`
+ * funcionam igual nas duas.
+ *
+ * Espaçamento: o `padding-block` vem por prop e é DELIBERADAMENTE
+ * irregular entre faixas. Ritmo perfeitamente regular parece planilha.
+ */
+interface Props {
+  tom: 'escuro' | 'claro' | 'menta';
+  /**
+   * Padding vertical. `hero` e assimetrico: pouco em cima, porque logo
+   * acima dele esta o header e nao outra faixa.
+   */
+  respiro?: 'normal' | 'curto' | 'longo' | 'hero';
+  id?: string;
+  class?: string;
+}
+
+const { tom, respiro = 'normal', id, class: className = '' } = Astro.props;
+
+const fundo = {
+  escuro: 'band-dark',
+  claro: 'band-light',
+  menta: 'band-mint',
+}[tom];
+
+/* 140px é o padrão da direção; curto e longo quebram a uniformidade.
+   `hero` é o único assimétrico: o topo da página não precisa do mesmo
+   respiro que a fronteira entre duas faixas, porque acima dele está o
+   header, não outra cor. */
+const padding = {
+  hero: 'pt-10 pb-20 lg:pt-16 lg:pb-[90px]',
+  curto: 'py-14 lg:py-16',
+  normal: 'py-14 lg:py-24',
+  longo: 'py-14 lg:py-28',
+}[respiro];
+---
+
+<section id={id} class:list={[fundo, className]}>
+  <div class:list={['band-inner', padding]}>
+    <slot />
+  </div>
+</section>

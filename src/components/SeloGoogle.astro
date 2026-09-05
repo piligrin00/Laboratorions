@@ -1,0 +1,83 @@
+---
+import { GOOGLE } from '../data/site';
+import { Icon } from 'astro-icon/components';
+
+/**
+ * Selo de nota do Google.
+ *
+ * AS CINCO ESTRELAS SÃO DECORATIVAS (`aria-hidden`), e a nota é dita em
+ * texto para quem usa leitor de tela. Cinco ícones anunciados um a um
+ * viram "estrela estrela estrela estrela estrela", que não informa nada:
+ * "5,0 de 5 no Google, 20 avaliações" informa.
+ *
+ * VIRA LINK quando `GOOGLE.url` estiver preenchida. Um selo de nota que
+ * não leva ao perfil vale menos do que parece: quem desconfia quer
+ * conferir, e não poder conferir é justamente o que faz prova social
+ * parecer inventada. Enquanto a URL não vem, o selo existe e é honesto,
+ * só não é verificável em um toque.
+ *
+ * A ESTRELA É SVG LITERAL, não o ícone do Lucide, e isso foi decidido
+ * depois de duas tentativas falhas. O ícone do Lucide é desenhado a
+ * traço: o `<path>` traz `fill="none"` e o astro-icon o entrega dentro
+ * de um `<symbol>` instanciado por `<use>`. Nem `fill-current` no
+ * `<svg>` nem `[&_path]:fill-current` pintam o resultado, porque
+ * seletor CSS não alcança o conteúdo clonado pelo `<use>`. O sintoma
+ * era pior que um detalhe: cinco estrelas vazadas é como se desenha
+ * nota ZERO, o oposto exato do que o selo afirma.
+ *
+ * Um `<path>` de dez elementos aqui dentro não tem esse problema, não
+ * depende de biblioteca e não carrega traço nenhum.
+ *
+ * A cor das estrelas é o verde da marca, não o amarelo do Google. O
+ * amarelo é a única cor fora da paleta que apareceria na página inteira,
+ * e a palavra "Google" já está escrita ao lado — o reconhecimento vem
+ * dela, não do tom da estrela.
+ */
+interface Props {
+  class?: string;
+}
+const { class: className = '' } = Astro.props;
+
+const rotulo = `${GOOGLE.nota} de 5 no Google, ${GOOGLE.total} avaliações`;
+const Tag = GOOGLE.url ? 'a' : 'div';
+---
+
+<Tag
+  class:list={[
+    'inline-flex min-h-11 items-center gap-3 rounded-full border border-hairline px-4 py-2',
+    GOOGLE.url && 'transition-colors duration-200 hover:bg-surface-hover',
+    className,
+  ]}
+  {...GOOGLE.url
+    ? { href: GOOGLE.url, target: '_blank', rel: 'noopener noreferrer' }
+    : {}}
+  aria-label={GOOGLE.url ? `${rotulo}. Abre o perfil no Google.` : undefined}
+>
+  <span class="flex items-center gap-0.5 text-accent" aria-hidden="true">
+    {
+      Array.from({ length: 5 }).map(() => (
+        <svg viewBox="0 0 24 24" class="size-4" fill="currentColor">
+          <path d="M12 2.4l2.83 6.1 6.44.7-4.82 4.49 1.37 6.38L12 16.86l-5.82 3.14 1.37-6.38-4.82-4.49 6.44-.7z" />
+        </svg>
+      ))
+    }
+  </span>
+
+  <span class="text-caption text-ink">
+    <span class="font-medium">{GOOGLE.nota}</span>
+    <span class="text-ink-muted"> · {GOOGLE.total} avaliações no Google</span>
+  </span>
+
+  {
+    GOOGLE.url && (
+      <Icon
+        name="lucide:arrow-up-right"
+        class="size-4 shrink-0 text-ink-muted"
+        aria-hidden="true"
+      />
+    )
+  }
+</Tag>
+
+{/* Texto só para leitor de tela: as estrelas acima são decorativas. */}
+<span class="sr-only">{rotulo}</span>

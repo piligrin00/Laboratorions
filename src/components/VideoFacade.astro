@@ -1,0 +1,164 @@
+---
+import { Picture } from 'astro:assets';
+import { Icon } from 'astro-icon/components';
+
+/**
+ * Vídeo com facade: um componente, os dois usos do site.
+ *
+ * REGRA CENTRAL: o `<video>` NÃO existe no DOM inicial. Só o poster é
+ * renderizado. O elemento é criado no clique do play, com `preload="none"`,
+ * então a página não baixa um byte de mp4 até o dentista pedir. Vídeo de
+ * celular cru derruba o Lighthouse e queima dado de quem está no 4G entre
+ * pacientes, que é exatamente o contexto de uso deste site.
+ *
+ * A proporção é travada por `aspect-ratio` no container, não pela altura
+ * do vídeo: o espaço já está reservado na primeira pintura, então trocar
+ * o poster pelo `<video>` não desloca nada (CLS zero).
+ *
+ * O botão é um `<button>` de verdade, não uma `<div>` com onclick: ele já
+ * vem focável por teclado, dispara com Enter e Espaço, e é anunciado como
+ * botão pelo leitor de tela. Ao dar play ele sai do DOM e o foco vai para
+ * o `<video>`, senão o foco ficaria preso num elemento que não existe mais.
+ *
+ * A TRANSCRIÇÃO é obrigatória. Serve para três coisas: acessibilidade,
+ * quem assiste sem som (a maioria, no celular), e indexação — o Google não
+ * lê nada de dentro de um mp4, então sem transcrição o conteúdo falado é
+ * invisível para busca.
+ */
+interface Props {
+  /** Caminho do mp4 em public/video/. Ex.: '/video/processo-consultorio.mp4' */
+  src: string;
+  /** Poster importado de src/assets/video/ (otimizado pelo Astro). */
+  poster: ImageMetadata;
+  /** Alt do poster. Descreve o que a imagem MOSTRA. */
+  posterAlt: string;
+  /** Rótulo do botão de play, lido por leitor de tela. Descreve o vídeo. */
+  ariaLabel: string;
+  /** Texto falado no vídeo. Obrigatório: ver comentário acima. */
+  transcricao: string;
+  /** Legenda curta abaixo do vídeo. Opcional. */
+  legenda?: string;
+  /** Proporção CSS do slot. Ex.: '9/16' (celular), '16/9' (deitado). */
+  proporcao?: string;
+  class?: string;
+}
+
+const {
+  src,
+  poster,
+  posterAlt,
+  ariaLabel,
+  transcricao,
+  legenda,
+  proporcao = '9/16',
+  class: className = '',
+} = Astro.props;
+---
+
+<figure class:list={['w-full', className]}>
+  <div
+    class="relative overflow-hidden rounded-[14px] border border-hairline"
+    style={`aspect-ratio: ${proporcao};`}
+    data-facade
+    data-src={src}
+    data-label={ariaLabel}
+  >
+    <Picture
+      src={poster}
+      alt={posterAlt}
+      formats={['avif', 'webp']}
+      widths={[280, 400, 560, 720]}
+      sizes="(min-width: 1024px) 30vw, 92vw"
+      loading="lazy"
+      class="size-full object-cover"
+    />
+
+    <button
+      type="button"
+      data-play
+      aria-label={ariaLabel}
+      class="group absolute inset-0 grid place-items-center"
+    >
+      <span
+        class="grid size-14 place-items-center rounded-full bg-accent text-accent-ink transition-transform duration-250 ease-out group-hover:scale-105"
+      >
+        <Icon name="lucide:play" class="ml-0.5 size-6" />
+      </span>
+    </button>
+  </div>
+
+  <figcaption class="mt-3 text-caption text-ink-muted">
+    {legenda ?? 'O vídeo só é carregado depois que você toca no play.'}
+  </figcaption>
+
+  {/* `<details>` nativo: abre sem JavaScript, é focável por teclado e o
+      conteúdo fica no HTML, então o Google indexa mesmo fechado. */}
+  <details class="transcricao mt-3">
+    <summary
+      class="inline-flex min-h-11 cursor-pointer items-center gap-2 text-caption text-accent"
+    >
+      <Icon
+        name="lucide:chevron-right"
+        class="seta size-4 shrink-0 transition-transform duration-200"
+      />
+      Ver transcrição
+    </summary>
+    <p class="measure mt-3 whitespace-pre-line text-caption text-ink-muted">
+      {transcricao}
+    </p>
+  </details>
+</figure>
+
+<style>
+  /* Remove o triângulo padrão do navegador: a seta é o ícone do Lucide,
+     que segue o mesmo sistema dos outros ícones do site. */
+  .transcricao > summary {
+    list-style: none;
+  }
+
+  .transcricao > summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .transcricao[open] > summary .seta {
+    transform: rotate(90deg);
+  }
+</style>
+
+<script>
+  /* Troca o poster pelo <video> no primeiro clique, uma vez só. Depois
+     disso o próprio player assume e o script não faz mais nada. */
+  for (const facade of document.querySelectorAll<HTMLElement>('[data-facade]')) {
+    const play = facade.querySelector<HTMLButtonElement>('[data-play]');
+    const src = facade.dataset.src;
+    if (!play || !src) continue;
+
+    play.addEventListener(
+      'click',
+      () => {
+        const video = document.createElement('video');
+        video.src = src;
+        video.controls = true;
+        video.playsInline = true;
+        /* `preload="none"` é o ponto do facade: mesmo depois de criado,
+           o elemento só busca bytes por causa do play() abaixo. */
+        video.preload = 'none';
+        video.className = 'size-full object-cover';
+        video.setAttribute('aria-label', facade.dataset.label ?? '');
+
+        /* Substitui todo o conteúdo, o que já remove o botão. */
+        facade.replaceChildren(video);
+
+        /* O foco estava no botão, que acabou de sair do DOM. Sem isto
+           ele voltaria para o <body> e quem navega por teclado perderia
+           a posição. */
+        video.focus();
+        video.play().catch(() => {
+          /* Autoplay bloqueado não é erro: o usuário aperta play nos
+             controles nativos, que já estão visíveis. */
+        });
+      },
+      { once: true },
+    );
+  }
+</script>

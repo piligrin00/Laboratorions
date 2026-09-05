@@ -1,0 +1,197 @@
+{
+  "northStar": "O dossiê impresso: uma pilha de sete faixas full-bleed com borda dura entre elas, escuro-claro-escuro-claro-escuro-menta-escuro, título em serifa de peso regular e dado em monoespaçada.",
+  "antiReferences": [
+    "A página clínica clara com foto de banco de imagens de dentista sorrindo.",
+    "O preto-e-dourado de 'odontologia premium', que é apenas o oposto previsível da primeira.",
+    "A rolagem escura única com um acento brilhante e herói centralizado sobre grade de cards iguais, que é o que esta categoria gera por padrão."
+  ],
+  "seed": "e9d1026a",
+  "form": "banded editorial dossier, pinned by the client's revision document over seed e9d1026a",
+  "buildPath": "code",
+  "bands": {
+    "regra": "Borda dura entre faixas. Nunca gradiente de transição: a mudança de fundo É a divisão. Abre e fecha escuro, então o site lê como escuro. As faixas claras existem para dar respiro e porque prótese fotografada aparece melhor sobre fundo claro.",
+    "1": {
+      "secoes": "Hero, Credibilidade",
+      "fundo": "#0C1014",
+      "respiro": "64px (desktop) / 40px (mobile), assimetrico"
+    },
+    "2": {
+      "secoes": "Serviços, Como funciona",
+      "fundo": "#F2F4F0",
+      "respiro": "96px"
+    },
+    "3": {
+      "secoes": "Tecnologia, Diferenciais",
+      "fundo": "#0C1014",
+      "respiro": "96px"
+    },
+    "4": {
+      "secoes": "Casos + vídeo, Depoimentos",
+      "fundo": "#F2F4F0",
+      "respiro": "112px"
+    },
+    "5": {
+      "secoes": "Sobre, Área de atendimento",
+      "fundo": "#0C1014",
+      "respiro": "96px"
+    },
+    "6": {
+      "secoes": "CTA final",
+      "fundo": "#E4EDE0",
+      "respiro": "96px"
+    },
+    "7": {
+      "secoes": "Rodapé",
+      "fundo": "#0C1014",
+      "respiro": "64px"
+    }
+  },
+  "colorRamps": {
+    "escuro": {
+      "base": "#0C1014",
+      "raised": "#191919",
+      "hover": "#22262A"
+    },
+    "claro": {
+      "base": "#F2F4F0",
+      "menta": "#E4EDE0",
+      "raised": "#FFFFFF",
+      "hover": "#E9EBE6"
+    },
+    "accent": {
+      "sobreEscuro": "#70C81A",
+      "hoverEscuro": "#5FAF14",
+      "sobreClaro": "#3A6F0B",
+      "hoverClaro": "#2E5A08"
+    },
+    "ink": {
+      "sobreEscuro": "#E3E3E1",
+      "apoioEscuro": "#9CA3A1",
+      "sobreClaro": "#14181A",
+      "apoioClaro": "#5C635E"
+    }
+  },
+  "contrast": {
+    "note": "Medido no DOM renderizado, com o fundo efetivo resolvido subindo a árvore até achar cor opaca. Zero falhas em todo texto visível da página.",
+    "ink-on-surface": 14.86,
+    "ink-muted-on-surface": 7.43,
+    "accent-on-surface": 9.06,
+    "on-light-on-surface-light": 16.14,
+    "on-light-soft-on-surface-light": 5.58,
+    "accent-on-light-on-surface-light": 5.49,
+    "accent-on-light-on-surface-mint": 5.06,
+    "correcao": "A direção pedia #4E9310 para o verde sobre claro. Medido dá 3,45:1, que reprova o mínimo AA de 4,5 para texto normal. #3A6F0B passa nas duas faixas claras e serve nos dois papéis, como cor de texto e como fundo de botão."
+  },
+  "typography": {
+    "display": "Newsreader 400 em todo título. Nunca bold, nunca sans.",
+    "body": "IBM Plex Sans, 15 a 16px, entrelinha 1.65, com muito ar em volta.",
+    "mono": "Do sistema, sem webfont, só onde há dado a medir: ficha de prazos, rótulos de leitura, chips sobre foto.",
+    "medida": "620px de texto corrido, cerca de 70 caracteres.",
+    "trocaDeSerifa": "A direção pedia Instrument Serif e autorizava Newsreader como alternativa. Ficou Newsreader: Instrument Serif é a fonte do movimento serifa-editorial e o detector a sinaliza como saturada, e Newsreader é variável, então um arquivo cobre a faixa de peso inteira."
+  },
+  "alignment": "Esquerda em tudo. A única exceção é o herói (o manifesto de fechamento, que era a segunda, foi removido do site). Verificado no render: 8 H2 de conteúdo, todos à esquerda, zero centralizado.",
+  "elevation": {
+    "philosophy": "flat",
+    "shadows": "none",
+    "glow": "none",
+    "backdropFilter": "nenhum aplicado a elemento algum",
+    "rationale": "As superfícies se separam por cor e espaço, não por elevação. Sombra, glow radial e vidro fosco são a marca d'água da landing page gerada e foram revogados pela revisão de direção.",
+    "unicoGradiente": "A condução pontilhada da ficha de prazos, que é funcional: ela desenha os pontos.",
+    "headerOpaco": "O header fixo é opaco. Translúcido, ele mudaria de cor em cada faixa por onde passasse."
+  },
+  "motion": {
+    "easing": "cubic-bezier(0.16, 1, 0.3, 1)",
+    "entranceDuration": "500ms",
+    "entranceTransform": "opacity 0 para 1, translateY(16px) para 0",
+    "siblingStagger": "70 a 90ms",
+    "primeiraDobra": "NÃO anima. Está lá na primeira pintura.",
+    "authoredMoment": "O selo circular da área de atendimento: texto em textPath girando em 34s. Único elemento em rotação contínua no site.",
+    "reducedMotion": "Desliga animação, nunca conteúdo. O selo para e as entradas ficam visíveis.",
+    "semJs": "`.js` é obrigatório no seletor do estado escondido. Sem JavaScript, opacity 0 deixaria a página inteira em branco."
+  },
+  "breakpoints": {
+    "640": "A barra fixa inferior substitui o botão flutuante. Os dois juntos empilhavam dois alvos verdes no mesmo canto.",
+    "1024": "As grades abrem (Servicos e Portas viram 2 colunas / 3 colunas conforme o caso)."
+  },
+  "layout": {
+    "columnMaxWidth": "1200px",
+    "gutter": {
+      "mobile": "1.25rem",
+      "sm": "2rem"
+    },
+    "bodyMeasure": "620px",
+    "sectionPadding": {
+      "mobile": "56px",
+      "curto": "64px",
+      "normal": "96px",
+      "longo": "112px"
+    },
+    "irregularidade": "O padding de faixa é deliberadamente irregular. Ritmo perfeitamente regular parece planilha; a faixa de casos é a mais longa porque é a mais importante.",
+    "testedWidths": [
+      360,
+      768,
+      1280,
+      1920
+    ],
+    "nota": "Reduzido em relacao ao valor original (90/140/180) a pedido do cliente: os titulos de secao ficavam baixos demais na tela."
+  },
+  "snippets": {
+    "band": {
+      "descricao": "A faixa clara redefine as variáveis de cor. Nenhum componente sabe em que faixa está, então a mesma marcação serve nas duas.",
+      "css": ".band-light, .band-mint { --color-ink: var(--color-on-light); --color-ink-muted: var(--color-on-light-soft); --color-hairline: var(--color-hairline-light); --color-accent: var(--color-accent-on-light); --color-accent-hover: #2E5A08; --color-accent-ink: var(--color-surface-light); --color-surface-raised: #FFFFFF; --color-surface-hover: #E9EBE6; }"
+    },
+    "fichaLinha": {
+      "descricao": "Linha da ficha de prazos: rótulo, condução pontilhada elástica, valor. A condução é background repetido, não string de pontos, então ela se estica sozinha e o leitor de tela não lê 'ponto ponto ponto'.",
+      "css": ".ficha-linha { display: flex; align-items: baseline; gap: 0.75rem; font-family: var(--font-mono); font-size: 0.8125rem; text-transform: uppercase; letter-spacing: 0.03em; } .ficha-linha > dt { white-space: nowrap; } .ficha-linha > .conducao { flex: 1 1 auto; align-self: center; block-size: 1px; min-inline-size: 1.5rem; background-image: radial-gradient(circle, var(--color-ink-muted) 0.5px, transparent 0.5px); background-size: 5px 1px; background-repeat: repeat-x; opacity: 0.65; }"
+    },
+    "gradeComDivisor": {
+      "descricao": "Separação de 1px entre células sem card empilhado. É como serviços e diferenciais se dividem.",
+      "css": ".grid.gap-px { background-color: var(--color-hairline); } .grid.gap-px > * { background-color: var(--color-surface-raised); }"
+    },
+    "readout": {
+      "descricao": "Rótulo de dado em mono do sistema. Nunca sobretítulo acima de heading.",
+      "css": ".readout { font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-ink-muted); font-variant-numeric: tabular-nums; }"
+    },
+    "selo": {
+      "descricao": "Selo circular com texto em textPath sobre um círculo de verdade. Único elemento em rotação do site.",
+      "css": ".selo-gira { animation: gira 34s linear infinite; transform-origin: center; } @keyframes gira { to { transform: rotate(360deg); } } @media (prefers-reduced-motion: reduce) { .selo-gira { animation: none !important; } }"
+    },
+    "focusRing": {
+      "css": ":focus-visible { outline: 2px solid var(--color-accent); outline-offset: 3px; border-radius: 0.25rem; }"
+    },
+    "browserSurfaces": {
+      "descricao": "As partes que o navegador desenha também carregam o design.",
+      "css": "html { color-scheme: dark; scrollbar-color: var(--color-surface-hover) var(--color-surface); scrollbar-width: thin; } body { caret-color: var(--color-accent); } ::selection { background-color: var(--color-accent); color: var(--color-surface); }"
+    }
+  },
+  "rules": [
+    "Faixas com borda dura, sem gradiente de transição. A mudança de fundo É a divisão.",
+    "Título em serifa peso 400, sempre. Nunca bold, nunca sans.",
+    "Alinhamento à esquerda, exceto o herói.",
+    "O verde significa uma coisa só: ativo, em processo, sua vez.",
+    "Verde da marca (#70C81A) só sobre escuro. Sobre claro é sempre #3A6F0B.",
+    "Nunca um bloco, faixa ou seção de fundo verde.",
+    "#FFFFFF é proibido em texto.",
+    "Zero sombra, zero glow, zero backdrop-filter, zero gradiente decorativo.",
+    "Monoespaçada só onde há número a medir.",
+    "Nenhum travessão em texto que o dentista lê.",
+    "Nenhuma regra de três. É a assinatura sintática mais reconhecível de texto gerado.",
+    "Nenhum sobretítulo em caixa-alta acima de heading.",
+    "Ícone nunca substitui foto na seção de tecnologia. Ali a foto é a prova.",
+    "Nenhum glifo Unicode nem emoji no lugar de ícone.",
+    "CTA é sempre fala concreta, nunca 'Saiba mais'.",
+    "Alvo de toque mínimo de 44px em qualquer controle, inclusive link de texto.",
+    "prefers-reduced-motion desliga animação, nunca conteúdo.",
+    "Placeholder marcado onde falta mídia. Nunca ilustração nem ícone provisório, porque provisório vira definitivo.",
+    "Datas e contagens de anos são calculadas, nunca fixadas.",
+    "Destaque de card por prioridade comercial (ex.: a porta de migracao em PorOndeEntra) e SO cor/fundo (borda accent + bg-surface-mint). Nunca selo, badge ou escala maior — REPOSICIONAMENTO.md e explicito sobre isso."
+  ],
+  "notCanonized": [
+    "A faixa de credibilidade é o arranjo número-grande + rótulo-pequeno que o craft floor lista como default de categoria. Fica porque o briefing a especifica literalmente com os quatro valores exatos, e porque em serifa ela lê como abertura de dossiê e não como placar. NÃO é regra do sistema: superfície nova não deve herdar esse arranjo por imitação.",
+    "A entrada de fade + slide-up em toda seção é exigência literal do briefing. Fica registrada como token de movimento, mas o momento autoral do sistema é o selo circular, e é ele que uma superfície nova deve herdar.",
+    "A curva do ciclo com nós numerados no eixo era o mundo anterior e foi REMOVIDA por decisão do cliente ao trocar a direção. Não está neste sistema e não deve voltar por engano.",
+    "O logo oficial (public/logo.png) é raster de 123x119 px. Os ícones são achatados sobre #0C1014 porque o N off-white desapareceria numa aba de tema claro. Se chegar a versão vetorial, o favicon pode voltar a ser SVG.",
+    "A grade de Servicos foi de 3 para 4 cards (sm:grid-cols-2, 2x2) para caber o card de CAD avulso sem espremer texto. Isso NAO revoga a regra de nao-paralelismo entre cards; o card do CAD tem estrutura de rotulo diferente dos outros tres (publico-alvo em vez de material).",
+    "O heroi teve uma colagem assimetrica de duas fotos (retrato + paisagem) numa versao anterior. Foi REMOVIDA a pedido do cliente: hoje o heroi e so texto centralizado (H1, subtitulo, 2 CTAs, 4 badges). A foto e o alt continuam em src/assets/hero/ e HERO.fotoAlt, sem uso. Nao reintroduzir sem pedido explicito."
+  ]
+}

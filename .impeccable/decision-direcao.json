@@ -1,0 +1,168 @@
+{
+  "title": "Escolha o mundo visual — Laboratório NS",
+  "question": "O roll assinou Ciclo de Sinterização. Fique com ele, pegue uma alternativa ou role de novo.",
+  "options": [
+    {
+      "id": "assigned",
+      "label": "Ciclo de Sinterização",
+      "kicker": "THE ROLL",
+      "lineage": "carta de ciclo do forno de zircônia: rampa, patamar, resfriamento",
+      "thesis": "A página é a própria carta do ciclo — o caso sobe a rampa e cada seção é um patamar com leitura numérica.",
+      "palette": ["#0C1014", "#191919", "#70C81A", "#E3E3E1", "#9CA3A1"],
+      "materials": ["linha de plotagem", "grade de temperatura", "leitura numérica monoespaçada"],
+      "viewport": "Uma linha verde fina desce pela esquerda como curva do ciclo; à direita o H1 e o WhatsApp, e a foto do trabalho ocupa o canto superior direito em escala real.",
+      "risk": "Se a curva virar enfeite em vez de estrutura, sobra um site escuro comum com um risco verde na lateral.",
+      "raised": [
+        {
+          "from": "challenger-accretion",
+          "raise": "Compromisso total de paleta: o verde marca uma coisa só — ativo, em processo, sua vez — e nunca decora."
+        },
+        {
+          "from": "challenger-emigre",
+          "raise": "Escada de espécime: o mesmo caso aparece em três escalas deliberadas, provando que o trabalho aguenta inspeção."
+        },
+        {
+          "from": "challenger-ansi",
+          "raise": "Presença como evento escasso: o CTA é uma linha aberta com quem produz, não um botão genérico."
+        },
+        {
+          "from": "challenger-vu",
+          "raise": "Balística com massa: a entrada dos elementos integra e amortece em vez de estalar em 500ms iguais."
+        }
+      ],
+      "wireframe": {
+        "cols": 12,
+        "rows": 10,
+        "regions": [
+          { "label": "curva do ciclo", "x": 0, "y": 0, "w": 1, "h": 10, "accent": true },
+          { "label": "H1 + WhatsApp", "x": 1, "y": 0, "w": 7, "h": 3 },
+          { "label": "trabalho real", "x": 8, "y": 0, "w": 4, "h": 3 },
+          { "label": "leituras: 2017 · 18 anos · 5 dias", "x": 1, "y": 3, "w": 11, "h": 1, "accent": true },
+          { "label": "3 serviços", "x": 1, "y": 4, "w": 11, "h": 2 },
+          { "label": "patamares 1–5 do processo", "x": 1, "y": 6, "w": 11, "h": 2, "accent": true },
+          { "label": "galeria de casos", "x": 1, "y": 8, "w": 8, "h": 2 },
+          { "label": "reels 9:16", "x": 9, "y": 8, "w": 3, "h": 2 }
+        ]
+      },
+      "comp": ".impeccable/mocks/decision/assigned.webp"
+    },
+    {
+      "id": "model-pick",
+      "label": "Viewport CAD",
+      "kicker": "IMPECCABLE’S PICK",
+      "lineage": "a tela do exocad/3Shape onde o caso é modelado",
+      "thesis": "O site é a bancada digital: viewport escuro, malha do caso e contatos oclusais em verde.",
+      "palette": ["#0C1014", "#22262A", "#70C81A", "#E3E3E1"],
+      "materials": ["malha wireframe", "mapa de calor oclusal", "painel de propriedades"],
+      "viewport": "Viewport grande com o caso em malha à esquerda, painel de leituras à direita, árvore de etapas embaixo.",
+      "risk": "É também a leitura literal do briefing e onde a maioria das execuções cairia — e corre o risco de parecer software, não a marca de um laboratório.",
+      "wireframe": {
+        "cols": 12,
+        "rows": 10,
+        "regions": [
+          { "label": "barra de ferramentas / nav", "x": 0, "y": 0, "w": 12, "h": 1 },
+          { "label": "viewport: caso em malha", "x": 0, "y": 1, "w": 8, "h": 5, "accent": true },
+          { "label": "painel de propriedades", "x": 8, "y": 1, "w": 4, "h": 5 },
+          { "label": "árvore de etapas", "x": 0, "y": 6, "w": 3, "h": 4 },
+          { "label": "casos como thumbnails de projeto", "x": 3, "y": 6, "w": 9, "h": 4 }
+        ]
+      },
+      "comp": ".impeccable/mocks/decision/model-pick.webp"
+    },
+    {
+      "id": "challenger-neon-program",
+      "label": "Desenho de Fabricação",
+      "verdict": "competitive",
+      "lineage": "prancha de oficina de letreiro: elevação cotada ao lado da face renderizada",
+      "thesis": "Cada caso aparece duas vezes: o desenho técnico aprovado e a peça entregue, lado a lado.",
+      "palette": ["#0C1014", "#70C81A", "#E3E3E1", "#9CA3A1"],
+      "materials": ["elevação cotada", "linha de chamada numerada", "face acabada"],
+      "viewport": "Par lado a lado: à esquerda o planejamento cotado, à direita a peça pronta, com as cotas ligando os dois.",
+      "case": "Funde bem: 'o que você aprova é o que chega no consultório' é literalmente elevação contra face renderizada. Ganha em clareza de produto, perde em identificação — esmalte porcelanizado, turquesa e lâmpadas de sequência são estrangeiros ao dentista.",
+      "risk": "Sem foto real dos dois lados, o par vira um lado só e o argumento evapora.",
+      "hero": "https://impeccable.style/worlds/cards/vernacular-ephemera-desert-neon-sign-program-hero.webp"
+    },
+    {
+      "id": "challenger-coiled-tower",
+      "label": "Torre de Roletes",
+      "verdict": "competitive",
+      "lineage": "torre de barro erguida em roletes visíveis, cada emenda um registro",
+      "thesis": "A peça se constrói em camadas visíveis, e a página sobe pelas mesmas camadas.",
+      "palette": ["#0C1014", "#191919", "#70C81A", "#E3E3E1"],
+      "materials": ["camadas empilhadas", "emenda visível", "seção vertical"],
+      "viewport": "Seção vertical ordenada: cada etapa da produção é uma faixa horizontal com a camada anterior ainda visível.",
+      "case": "Funde parcialmente: a topologia de cursos ascendentes casa com as 5 etapas e com a impressão 3D camada por camada. Ganha em clareza, perde em identificação — e a paleta terracota bate de frente com a paleta travada, então só a estrutura sobreviveria.",
+      "risk": "Reduzida à paleta travada, sobra pouco do mundo original — vira o próprio patamar da direção assinada.",
+      "hero": "https://impeccable.style/worlds/cards/clay-ceramics-fracture-coiled-earth-tower-hero.webp"
+    },
+    {
+      "id": "challenger-accretion",
+      "label": "Disco de Acreção",
+      "verdict": "declined",
+      "lineage": "disco de acreção de buraco negro no limiar do horizonte",
+      "thesis": "O caso cruza um limiar irreversível e sai do outro lado como peça.",
+      "palette": ["#000000", "#C9D7FF", "#D4A017"],
+      "materials": ["anéis concêntricos", "gradiente de desvio para o vermelho", "arco de fóton"],
+      "viewport": "Centro negro intocado, bandas concêntricas de luz e rótulos orbitando o aro.",
+      "case": "Funde mal: o dentista não se reconhece em astrofísica, e 'limiar irreversível' contradiz um processo cujo ponto de venda é justamente a aprovação antes de usinar. Perde nos dois eixos.",
+      "risk": "Espetáculo sem leitura: bonito, ilegível como argumento comercial.",
+      "kept": "Compromisso total de paleta — nenhuma cor decora, cada uma significa um estado físico.",
+      "hero": "https://impeccable.style/worlds/cards/galaxies-nebulae-deep-time-accretion-disk-threshold-hero.webp"
+    },
+    {
+      "id": "challenger-emigre",
+      "label": "Espécime Bitmap",
+      "verdict": "declined",
+      "lineage": "espécime tipográfico bitmap da Emigre",
+      "thesis": "A baixa resolução assumida como estética, em escala de cartaz.",
+      "palette": ["#FFFFFF", "#111111", "#FF3B00"],
+      "materials": ["letra em pixel grosso", "retícula de pontos", "coluna justificada"],
+      "viewport": "Manchete construída de pixels visíveis sobre colunas densas de texto fino.",
+      "case": "Funde mal: pixel grosso é o oposto declarado de 'precisão de micra', e fundo branco viola a paleta travada. Perde nos dois eixos — e o eixo de clareza fica negativo, não só fraco.",
+      "risk": "Contradiz a promessa central do produto no primeiro olhar.",
+      "kept": "Repetição de espécime: a mesma forma em várias escalas como prova do sistema.",
+      "hero": "https://impeccable.style/worlds/cards/emigre-bitmap-specimen-hero.webp"
+    },
+    {
+      "id": "challenger-ansi",
+      "label": "BBS ANSI",
+      "verdict": "declined",
+      "lineage": "mural discado às 2 da manhã, arte ANSI em dezesseis cores",
+      "thesis": "Um bairro feito de texto, com presença escassa e menus numerados.",
+      "palette": ["#000000", "#00AAAA", "#AA00AA", "#FFFFFF"],
+      "materials": ["glifos de bloco CP437", "grade de 80×25", "revelação linha a linha"],
+      "viewport": "Tela de título em arte de bloco sobre linhas de menu numeradas.",
+      "case": "Funde mal: nenhuma identificação com o dentista, e uma estética modo-texto não consegue carregar prova fotográfica — que é justamente a seção mais importante da página. Perde nos dois eixos.",
+      "risk": "Mata a galeria de casos, que é o argumento inteiro.",
+      "kept": "Presença como evento escasso e precioso — quem está online é notícia, não enfeite.",
+      "hero": "https://impeccable.style/worlds/cards/medium-native-ansi-bbs-nightboard-hero.webp"
+    },
+    {
+      "id": "challenger-vu",
+      "label": "Ponte de VU",
+      "verdict": "declined",
+      "lineage": "fileira de vu-meters balísticos atrás do vidro de uma mesa de gravação",
+      "thesis": "Você lê a sala varrendo a fileira inteira, nunca abrindo um medidor.",
+      "palette": ["#EFE7D4", "#111111", "#8B0000"],
+      "materials": ["face de marfim atrás de vidro", "agulha balística", "arco de escala"],
+      "viewport": "Fileira longa de medidores idênticos, todos inclinando juntos no mesmo tempo.",
+      "case": "Funde mal: o dentista não se reconhece em mesa de gravação, e a fileira de instrumentos idênticos não carrega o mecanismo central do produto, que é um processo de cinco etapas encadeadas. Perde nos dois eixos.",
+      "risk": "Vira ornamento de instrumentação sobre um conteúdo que não é medição.",
+      "kept": "Balística com massa: o instrumento integra e amortece, nunca salta para o valor instantâneo.",
+      "hero": "https://impeccable.style/worlds/cards/signals-instruments-vu-meter-bridge-hero.webp"
+    }
+  ],
+  "reroll": { "registers": ["safer", "bolder"] },
+  "buildPath": { "value": "code", "toggle": true },
+  "canon": true,
+  "canonCard": {
+    "label": "O padrão da categoria",
+    "thesis": "A landing B2B escura que essa categoria entrega, executada de forma impecável.",
+    "palette": ["#0C1014", "#191919", "#70C81A", "#E3E3E1"],
+    "materials": ["grade de cards", "faixa de estatísticas", "fotografia de produto"],
+    "viewport": "Hero centrado com manchete e botão, três cards de serviço, faixa de números, galeria, CTA final.",
+    "risk": "Indistinguível da concorrência por construção — o dentista não lembra de onde veio.",
+    "comp": ".impeccable/mocks/decision/canon.webp"
+  },
+  "steer": true
+}

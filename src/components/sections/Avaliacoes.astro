@@ -1,0 +1,52 @@
+---
+import Cabecalho from '../Cabecalho.astro';
+import CtaButton from '../CtaButton.astro';
+import SeloGoogle from '../SeloGoogle.astro';
+import Depoimentos from './Depoimentos.astro';
+
+/**
+ * Prova social: a nota do Google e tres avaliacoes reais.
+ *
+ * ESTA SECAO ERA "CASOS" e tinha uma galeria de seis fotos de trabalho.
+ * O cliente decidiu nao publicar as fotos, e a galeria saiu. A troca tem
+ * uma consequencia que fica registrada aqui de proposito: o site nao
+ * mostra mais NENHUMA foto de trabalho entregue. A prova visual sumiu e
+ * sobrou a prova testemunhal. Vinte avaliacoes cinco estrelas seguram
+ * bem, mas quem terceiriza protese decide olhando adaptacao, e nao ha
+ * mais nada na pagina para olhar.
+ *
+ * Se as fotos voltarem, `Galeria.astro` e `src/data/casos.ts` continuam
+ * prontos: e reimportar o componente aqui.
+ *
+ * O TITULO NAO REPETE O NUMERO. O selo logo abaixo ja diz "5,0 · 20
+ * avaliacoes"; um titulo dizendo a mesma coisa gastaria a linha mais
+ * visivel da secao para repetir o que vem tres centimetros depois.
+ *
+ * O APOIO ADMITE O RECORTE. Sao tres de vinte, escolhidas por mim, e
+ * dizer isso custa nada e vale muito: prova social que finge nao ter
+ * curadoria e a que mais parece inventada.
+ *
+ * Fica na faixa CLARA, que e onde a pagina respira entre dois blocos
+ * escuros.
+ */
+---
+
+<Cabecalho
+  titulo="O que diz quem já mandou caso para cá."
+  apoio="Três das vinte avaliações públicas do perfil no Google."
+  class="mb-6"
+/>
+
+<div data-reveal>
+  <SeloGoogle />
+</div>
+
+<Depoimentos />
+
+<div class="mt-10" data-reveal>
+  <CtaButton
+    context="galeria"
+    variant="solida"
+    label="Quero falar com o laboratório"
+  />
+</div>

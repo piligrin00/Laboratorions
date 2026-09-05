@@ -1,0 +1,35 @@
+---
+import { CTA_FINAL, NEGOCIO } from '../../data/site';
+import CtaButton from '../CtaButton.astro';
+
+/**
+ * Fechamento mais forte da pagina, na faixa menta, logo antes do
+ * manifesto.
+ *
+ * O CTA nao promete "atendimento", promete uma pessoa. "Direto com quem
+ * produz" e literal, e por isso o numero aparece embaixo do botao: quem
+ * quiser ligar em vez de escrever ja tem o dado na mao.
+ *
+ * SEM glow atras. A cor plana da faixa faz o trabalho.
+ * Alinhado a esquerda, como todas as secoes fora do heroi e do
+ * manifesto.
+ */
+---
+
+<div class="grid gap-10 lg:grid-cols-[1fr_auto] lg:items-end">
+  <div>
+    <h2 class="text-h2 text-ink" data-reveal>{CTA_FINAL.titulo}</h2>
+    <p
+      class="measure mt-6 text-body-sm text-ink-muted"
+      data-reveal
+      style="--reveal-delay: 70ms"
+    >
+      {CTA_FINAL.texto}
+    </p>
+  </div>
+
+  <div class="lg:text-right" data-reveal style="--reveal-delay: 140ms">
+    <CtaButton context="ctaFinal" variant="solida" label={CTA_FINAL.botao} />
+    <p class="readout mt-4">{NEGOCIO.whatsapp}</p>
+  </div>
+</div>

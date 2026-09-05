@@ -1,0 +1,48 @@
+---
+/**
+ * Espaco identificado no lugar de uma foto que o cliente ainda nao
+ * enviou.
+ *
+ * Regra do briefing (secao 11): melhor um espaco vazio marcado do que
+ * uma foto de banco de imagens. O rotulo XXX fica VISIVEL de proposito
+ * — quem abrir o site sabe exatamente o que falta e onde.
+ *
+ * A proporcao e declarada para o layout nascer correto: o bloco ocupa
+ * exatamente o espaco que a foto real vai ocupar, entao trocar a foto
+ * nao mexe em nada.
+ */
+interface Props {
+  /** Rotulo da pendencia. Ex.: 'XXX-HERO-MEDIA'. */
+  label: string;
+  /**
+   * Proporcao CSS. Ex.: '4/5', '9/16', '16/10'.
+   *
+   * `null` desliga o aspect-ratio inline: use quando quem manda na
+   * altura e o container, como num row-span de grade. Sem essa saida o
+   * estilo inline venceria qualquer classe utilitaria, porque atributo
+   * style tem precedencia sobre folha de estilo.
+   */
+  ratio?: string | null;
+  /** Uma linha dizendo o que deve entrar aqui. */
+  nota?: string;
+  class?: string;
+}
+
+const {
+  label,
+  ratio = '4/5',
+  nota,
+  class: className = '',
+} = Astro.props;
+---
+
+<div
+  class:list={[
+    'grid place-content-center gap-3 rounded-[14px] border border-dashed border-hairline bg-surface-raised p-6 text-center',
+    className,
+  ]}
+  style={ratio ? `aspect-ratio: ${ratio};` : undefined}
+>
+  <p class="readout text-accent">{label}</p>
+  {nota && <p class="max-w-[24ch] text-caption text-ink-muted">{nota}</p>}
+</div>

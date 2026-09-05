@@ -1,0 +1,93 @@
+---
+import { NAV, NEGOCIO } from '../data/site';
+import CtaButton from './CtaButton.astro';
+
+/**
+ * Cabeçalho fixo.
+ *
+ * GRADE DE TRÊS COLUNAS `1fr auto 1fr`, não flex com `justify-between`.
+ * A diferença importa: com flex a nav centraliza entre os dois vizinhos,
+ * e como o botão do WhatsApp é bem mais largo que o lockup, ela sairia
+ * visivelmente torta. Com `1fr auto 1fr` as duas colunas laterais têm a
+ * mesma largura por construção, então a coluna do meio cai no eixo da
+ * página, independente do que houver dos lados.
+ *
+ * Fundo OPACO, sem `backdrop-filter`. A página alterna faixas escuras e
+ * claras, e um header translúcido ficaria com uma cor diferente em cada
+ * faixa por onde passasse.
+ *
+ * O lockup encolhe abaixo de 640px. Em 360px, o monograma de 54px com o
+ * wordmark de 24px mais o link de contato estouram a largura disponível;
+ * encolher é o que evita espremer o wordmark ou cortá-lo.
+ *
+ * Abaixo de 1024px a nav some e a grade vira `auto 1fr`, com o lockup na
+ * coluna intrínseca. Isso não é detalhe: com `1fr` na primeira coluna, a
+ * caixa da âncora era clipada na largura da trilha enquanto o wordmark,
+ * que é `nowrap`, continuava pintando por cima do link de contato. O
+ * `scrollWidth` não crescia, então o teste de overflow horizontal passava
+ * e a colisão só aparecia no pixel.
+ */
+---
+
+<header class="sticky top-0 z-50 border-b border-hairline bg-surface">
+  <div
+    class="band-inner grid h-[4.75rem] grid-cols-[auto_1fr] items-center gap-4 sm:h-[5.5rem] lg:grid-cols-[1fr_auto_1fr]"
+  >
+    {/* Coluna 1: lockup */}
+    <a
+      href="#top"
+      class="flex items-center gap-2 justify-self-start sm:gap-3"
+      aria-label={`${NEGOCIO.nome}, ir para o topo`}
+    >
+      <img
+        src="/logo.png"
+        alt=""
+        width="123"
+        height="119"
+        class="h-10 w-auto sm:h-[54px]"
+        fetchpriority="high"
+      />
+      <span
+        class="whitespace-nowrap font-sans text-[1.0625rem] font-semibold tracking-tight text-ink sm:text-[1.5rem]"
+      >
+        Laboratório <span class="text-accent">NS</span>
+      </span>
+    </a>
+
+    {/* Coluna 2: nav, no eixo da página */}
+    <nav aria-label="Navegação principal" class="hidden justify-self-center lg:block">
+      <ul class="flex items-center gap-7">
+        {
+          NAV.map((item) => (
+            <li>
+              <a
+                href={item.href}
+                class="inline-flex min-h-11 items-center whitespace-nowrap text-caption text-ink-muted transition-colors duration-200 hover:text-ink"
+              >
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    {/* Coluna 3: conversão */}
+    <div class="justify-self-end">
+      <CtaButton
+        context="header"
+        variant="solida"
+        label="Falar no WhatsApp"
+        class="max-sm:hidden"
+      />
+      {/* Em tela estreita o botão do header comeria o lockup. A barra
+          fixa inferior cobre esse caso. */}
+      <a
+        href="#contato"
+        class="inline-flex min-h-11 items-center whitespace-nowrap px-1 text-caption font-medium text-accent sm:hidden"
+      >
+        Contato
+      </a>
+    </div>
+  </div>
+</header>

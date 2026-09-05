@@ -1,0 +1,28 @@
+---
+import { waLink } from '../data/site';
+import WhatsappIcon from './WhatsappIcon.astro';
+
+/**
+ * Botao flutuante do WhatsApp.
+ *
+ * DECISAO DOCUMENTADA (briefing secao 5, item 7): abaixo de 640px este
+ * botao DESAPARECE e a barra fixa inferior (MobileCtaBar) assume. Os
+ * dois juntos empilhavam dois alvos verdes no mesmo canto da tela, o
+ * que e poluicao e nao redundancia util.
+ *
+ * Sem pulso. A pagina tem UM elemento em movimento continuo, o selo
+ * circular da area de atendimento; um segundo virava enfeite.
+ */
+---
+
+<a
+  href={waLink('header')}
+  target="_blank"
+  rel="noopener"
+  data-wa="header"
+  aria-label="Falar no WhatsApp com o Laboratório NS"
+  class="fixed bottom-6 right-6 z-50 hidden size-14 place-items-center rounded-full bg-accent text-surface transition-colors duration-250 hover:bg-accent-hover sm:grid"
+>
+  <WhatsappIcon class="size-7" />
+</a>
+

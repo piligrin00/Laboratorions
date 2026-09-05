@@ -1,0 +1,42 @@
+---
+import { DIFERENCIAIS } from '../../data/site';
+import Cabecalho from '../Cabecalho.astro';
+import CtaButton from '../CtaButton.astro';
+
+/**
+ * Diferenciais, na faixa escura.
+ *
+ * Sem card e sem icone: tres blocos de texto separados por regua fina,
+ * numerados em serifa. A secao anterior (Tecnologia) e uma grade de
+ * fotos; repetir caixa aqui faria do card a estrutura da pagina.
+ */
+---
+
+<Cabecalho titulo="Por que os casos difíceis chegam aqui." class="mb-14" />
+
+<div class="grid gap-px bg-hairline lg:grid-cols-3">
+  {
+    DIFERENCIAIS.map((item, i) => (
+      <article
+        class="bg-surface pt-8 lg:px-8 lg:pt-0 lg:first:pl-0"
+        data-reveal
+        style={`--reveal-delay: ${i * 80}ms`}
+      >
+        <p class="numeral text-2xl leading-none">
+          {String(i + 1).padStart(2, '0')}
+        </p>
+        <h3 class="mt-5 text-h3 text-ink">{item.titulo}</h3>
+        <p class="mt-4 text-body-sm text-ink-muted">{item.descricao}</p>
+        {'cta' in item && item.cta && (
+          <div class="mt-5">
+            <CtaButton
+              context={item.cta.contexto}
+              variant="texto"
+              label={item.cta.label}
+            />
+          </div>
+        )}
+      </article>
+    ))
+  }
+</div>

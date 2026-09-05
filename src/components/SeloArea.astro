@@ -1,0 +1,83 @@
+---
+/**
+ * Selo circular com texto acompanhando a curva.
+ *
+ * ÚNICO elemento em rotação contínua no site inteiro, e a rotação para
+ * sob `prefers-reduced-motion` (ver `.selo-gira` em global.css).
+ *
+ * O texto é um `<textPath>` de verdade sobre um círculo, não letras
+ * posicionadas à mão: assim ele acompanha a curva em qualquer tamanho e
+ * continua sendo texto para o navegador. O `<title>` dá o nome
+ * acessível; a rotação é puramente visual e fica `aria-hidden`.
+ */
+interface Props {
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+
+const texto = 'ZONA SUL · BARRA DA TIJUCA · RETIRADA E ENTREGA · ';
+---
+
+<svg
+  viewBox="0 0 200 200"
+  role="img"
+  class:list={['size-40 lg:size-48', className]}
+>
+  <title>Zona Sul, Barra da Tijuca, retirada e entrega no consultório</title>
+
+  <defs>
+    <path
+      id="selo-curva"
+      d="M 100,100 m -76,0 a 76,76 0 1,1 152,0 a 76,76 0 1,1 -152,0"
+      fill="none"
+    />
+  </defs>
+
+  <g aria-hidden="true">
+    <circle
+      cx="100"
+      cy="100"
+      r="88"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1"
+      opacity="0.18"
+    />
+
+    <g class="selo-gira">
+      <text
+        fill="currentColor"
+        font-size="12.5"
+        letter-spacing="2.4"
+        style="font-family: var(--font-mono);"
+      >
+        <textPath href="#selo-curva" startOffset="0">{texto}</textPath>
+      </text>
+    </g>
+
+    {/* Miolo: o prazo, parado no centro enquanto a borda gira. */}
+    <text
+      x="100"
+      y="94"
+      text-anchor="middle"
+      fill="currentColor"
+      font-size="30"
+      style="font-family: var(--font-display);"
+    >
+      5
+    </text>
+    <text
+      x="100"
+      y="114"
+      text-anchor="middle"
+      fill="currentColor"
+      font-size="10"
+      letter-spacing="1.6"
+      opacity="0.7"
+      style="font-family: var(--font-mono);"
+    >
+      DIAS ÚTEIS
+    </text>
+  </g>
+</svg>
