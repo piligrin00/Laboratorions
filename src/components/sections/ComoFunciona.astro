@@ -31,6 +31,13 @@ import MediaPlaceholder from '../MediaPlaceholder.astro';
  * decide nada olhando o pôster: a decisão vem de assistir, e para
  * assistir basta o play estar visível e alcançável.
  *
+ * E CENTRALIZADO no celular (`mx-auto`), por pedido do cliente. É a
+ * exceção que a regra de alinhamento à esquerda comporta: o quadro é
+ * estreito de propósito, então encostado na margem ele deixava um vão
+ * morto de 110px do lado direito, e o olho lia aquilo como erro de
+ * layout, não como decisão. A partir de lg o `mx-0` devolve o
+ * alinhamento, porque lá ele preenche a coluna inteira e não sobra vão.
+ *
  * A coluna do vídeo é `sticky` no desktop: as cinco etapas são altas, e
  * sem isso o vídeo sumiria da tela na terceira.
  *
@@ -80,7 +87,7 @@ const poster = Object.values(posters)[0]?.default ?? null;
       vídeo caindo na linha 2 — medido: começava 278px abaixo do título,
       exatamente o vão que esta mudança existe para eliminar. */}
   <div
-    class="max-w-[240px] sm:max-w-[280px] lg:sticky lg:top-24 lg:col-start-2 lg:row-start-1 lg:row-end-3 lg:max-w-none"
+    class="mx-auto max-w-[240px] sm:max-w-[280px] lg:sticky lg:top-24 lg:col-start-2 lg:row-start-1 lg:row-end-3 lg:mx-0 lg:max-w-none"
     data-reveal
     style="--reveal-delay: 120ms"
   >
