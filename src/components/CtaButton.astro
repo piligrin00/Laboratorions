@@ -48,7 +48,7 @@ const destino = href ?? waLink(context);
 const texto = label ?? 'Falar no WhatsApp';
 
 const base =
-  'group inline-flex min-h-11 items-center gap-2 rounded-full text-body-sm font-medium transition duration-250 ease-out';
+  'cta-button group inline-flex min-h-11 items-center gap-2 rounded-full text-body-sm font-medium transition duration-250 ease-out';
 
 const variantes = {
   /* `text-accent-ink` inverte por faixa: escuro sobre o verde-limao da
@@ -77,6 +77,6 @@ const variantes = {
   <span>{texto}</span>
   <Icon
     name="lucide:arrow-right"
-    class="size-4 shrink-0 transition-transform duration-250 ease-out group-hover:translate-x-0.5"
+    class="size-4 shrink-0 transition-transform duration-250 ease-out group-hover:translate-x-1.5 group-focus-visible:translate-x-1.5"
   />
 </a>

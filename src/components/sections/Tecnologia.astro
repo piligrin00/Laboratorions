@@ -58,7 +58,7 @@ const porNome = new Map<string, ImageMetadata>(
       const foto = porNome.get(item.arquivo) ?? null;
 
       return (
-        <article data-reveal style={`--reveal-delay: ${i * 70}ms`}>
+        <article class="equipment-card" data-reveal style={`--reveal-delay: ${i * 70}ms`}>
           <div class="relative overflow-hidden rounded-[14px]">
             {
               foto ? (

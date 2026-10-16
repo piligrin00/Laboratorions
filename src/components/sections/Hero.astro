@@ -1,54 +1,65 @@
 ---
+import { Picture } from 'astro:assets';
 import { HERO } from '../../data/site';
+import fotoCapa from '../../assets/lab/andre-nascimento.jpg';
 import CtaButton from '../CtaButton.astro';
-
-/**
- * Primeira dobra: só o texto.
- *
- * CENTRALIZADA, e é a única seção da página que é. O manifesto de
- * fechamento é a outra. Os dois são os extremos da página e centralizar
- * ali é acento deliberado; centralizar o resto é o tique número um de
- * site gerado.
- *
- * SEM imagem. A colagem de duas fotos que existia aqui foi removida a
- * pedido do cliente. A prova visual da página vive na galeria de casos e
- * na seção de tecnologia, que é onde o dentista vai procurá-la.
- *
- * A foto do escaneamento continua em src/assets/hero/ e o texto
- * alternativo dela em `HERO.fotoAlt`, os dois sem uso no momento. Se a
- * colagem voltar, é só reintroduzir o bloco; nada foi apagado.
- *
- * SEM glow radial atrás do conteúdo. Glow atrás do herói é a marca
- * d'água da landing page gerada, e foi revogado pela revisão de direção.
- *
- * NADA aqui tem data-reveal. A primeira dobra não anima: ela está lá na
- * primeira pintura. Animar a entrada do H1 significa que o conteúdo mais
- * importante começa invisível e depende do observer para aparecer.
- */
 ---
 
-<div class="mx-auto max-w-[760px] text-center">
-  <h1 class="text-display text-ink">{HERO.h1}</h1>
-
-  <p class="measure mx-auto mt-7 text-body-sm text-ink-muted">
-    {HERO.subtitulo}
-  </p>
-
-  <div class="mt-9 flex flex-wrap items-center justify-center gap-3">
-    <CtaButton context="hero" variant="solida" />
-    <CtaButton
-      context="hero"
-      variant="fantasma"
-      href="#casos"
-      label="Ver os casos"
-      icone={false}
+<div class="hero-cover">
+  {/* A imagem ambienta a mensagem. O escurecimento é aplicado em CSS,
+      preservando o arquivo original e a prioridade visual do texto. */}
+  <div class="hero-photo" aria-hidden="true">
+    <Picture
+      src={fotoCapa}
+      alt=""
+      formats={['avif', 'webp']}
+      widths={[640, 960, 1448]}
+      sizes="(min-width: 1024px) 76vw, 100vw"
+      loading="eager"
+      fetchpriority="high"
     />
   </div>
+  <div class="hero-shade" aria-hidden="true"></div>
 
-  {/* O terceiro badge ("Vamos até o seu consultório") é o mais
-      importante da página: é o que remove a objeção de quem ainda não
-      escaneia. Sem data-reveal, como o resto do herói. */}
-  <ul class="mt-8 flex flex-wrap items-center justify-center gap-x-3 gap-y-2">
-    {HERO.badges.map((badge) => <li class="chip">{badge}</li>)}
-  </ul>
+  <div class="band-inner hero-layout">
+    <div class="hero-copy">
+      <h1 class="text-display text-ink">{HERO.h1}</h1>
+      <p class="hero-description mt-7 text-body-sm">{HERO.subtitulo}</p>
+      <div class="mt-9 flex flex-wrap items-center gap-3">
+        <CtaButton context="hero" variant="solida" />
+        <CtaButton context="hero" variant="fantasma" href="#avaliacoes"
+          label="Ver avaliações" icone={false} />
+      </div>
+      <ul class="hero-badges mt-8 flex flex-wrap items-center gap-x-3 gap-y-3">
+        {HERO.badges.map((badge) => <li class="chip">{badge}</li>)}
+      </ul>
+    </div>
+  </div>
 </div>
+
+<style>
+  .hero-cover { position: relative; isolation: isolate; overflow: hidden; }
+  .hero-photo, .hero-shade { position: absolute; inset: 0; z-index: -1; pointer-events: none; }
+  .hero-photo { height: 360px; }
+  .hero-photo :global(picture), .hero-photo :global(img) { display: block; width: 100%; height: 100%; }
+  .hero-photo :global(img) { object-fit: cover; object-position: 35% 28%; filter: brightness(.55) saturate(.7); }
+  .hero-shade { background: linear-gradient(to bottom, rgb(12 16 20 / .08) 0, rgb(12 16 20 / .22) 150px, #0c1014 350px); }
+  .hero-layout { padding-block: 290px 48px; }
+  .hero-copy { position: relative; max-width: 580px; }
+  .hero-description { color: #c1c7c3; max-width: 47ch; }
+  .hero-badges :global(.chip) { background: rgb(12 16 20 / .65); color: #c1c7c3; border-color: rgb(227 227 225 / .2); line-height: 1.35; }
+  @media (min-width: 640px) and (max-width: 1023px) {
+    .hero-photo { height: 440px; }
+    .hero-photo :global(img) { object-position: 35% 22%; }
+    .hero-shade { background: linear-gradient(to bottom, rgb(12 16 20 / .12), rgb(12 16 20 / .3) 200px, #0c1014 430px); }
+    .hero-layout { padding-top: 360px; }
+  }
+  @media (min-width: 1024px) {
+    .hero-photo { width: 76%; height: 100%; }
+    .hero-photo :global(img) { object-position: 32% 30%; }
+    .hero-shade { background: linear-gradient(90deg, rgb(12 16 20 / .16) 0%, rgb(12 16 20 / .32) 29%, rgb(12 16 20 / .88) 53%, #0c1014 78%); }
+    .hero-layout { display: flex; align-items: center; justify-content: flex-end; min-height: 650px; padding-block: 72px; }
+    .hero-copy { width: 51%; }
+    h1 { font-size: clamp(3rem, 4.5vw, 4rem); }
+  }
+</style>

@@ -287,15 +287,15 @@ texto corrido é fantasia de "técnico" e não entra.
   some e a grade vira `auto 1fr`, com o lockup na coluna intrínseca:
   em `1fr` a caixa dele era clipada e o wordmark `nowrap` pintava por
   cima do link de contato.
-- **Respiro do topo:** a faixa do herói é a única com padding vertical
-  assimétrico (`64px` em cima, `90px` embaixo no desktop; `40px` e
-  `80px` no móvel). Acima dela está o header, não outra cor, então ela
-  não precisa do mesmo respiro de uma fronteira entre faixas.
-- **Herói é só texto**, centralizado: H1, subtítulo, dois CTAs, quatro
-  badges. Uma colagem assimétrica de duas fotos existiu numa versão
-  anterior e foi removida a pedido do cliente; não reintroduzir sem
-  pedido explícito (a foto e o alt continuam em `src/assets/hero/` e
-  `HERO.fotoAlt`, sem uso).
+- **Capa com foto escurecida**, conforme a nova solicitação do cliente:
+  André à esquerda e título, apoio, CTAs e três badges à direita no desktop.
+  A foto atual é `src/assets/lab/andre-nascimento.jpg`; a referência enviada
+  no chat é outra foto e ainda precisa ser disponibilizada como arquivo.
+  O escurecimento usa CSS, preservando o original. No móvel a imagem fica
+  acima do texto para não sobrepor o rosto. O título aparece sem animação.
+- **Interações:** botões sobem 3px, setas avançam, links do menu ganham
+  sublinhado, painéis destacam a base e equipamentos ampliam suavemente.
+  Foco de teclado tem retorno visível e movimento reduzido desliga deslocamentos.
 - **Breakpoints:** 640px (lockup e barra de conversão trocam de forma),
   1024px (nav aparece, grades de Portas e Serviços abrem).
 - Verificado em 360, 768, 1280 e 1920px.
@@ -306,8 +306,8 @@ texto corrido é fantasia de "técnico" e não entra.
 `backdrop-filter`. As superfícies se separam por **cor e espaço**, não
 por elevação.
 
-O único gradiente do CSS compilado é a condução pontilhada da ficha de
-prazos, e ele é funcional: desenha os pontos. Gradiente decorativo, glow
+Os gradientes funcionais desenham os pontos da ficha de prazos e
+escurecem a foto da capa para garantir a leitura do texto. Gradiente decorativo, glow
 radial atrás de conteúdo e vidro fosco são proibidos por serem a marca
 d'água da landing page gerada.
 

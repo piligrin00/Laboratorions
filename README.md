@@ -158,11 +158,18 @@ Os quatro arquivos, em `src/assets/maquinas/`:
 
 Os nomes estão em `TECNOLOGIA`, em `src/data/site.ts`, junto com o chip de cada uma (o que ela resolve para o dentista).
 
-### A primeira tela não tem foto
+### Foto da capa
 
-A primeira tela existia com uma colagem de duas fotos, mas foi removida a pedido do cliente. Hoje é só texto: título, subtítulo, os dois botões e os três badges, todos centralizados.
+A capa usa `src/assets/lab/andre-nascimento.jpg`, importada em
+`src/components/sections/Hero.astro`. No desktop, André aparece à esquerda
+com os textos à direita; no celular, a foto fica acima do texto.
+O escurecimento é feito em CSS e não altera o arquivo original.
+Para trocar a imagem, altere o import `fotoCapa` no componente. A foto de
+referência enviada na revisão mais recente ainda precisa ser disponibilizada
+como arquivo; esta primeira versão usa a imagem já presente no repositório.
 
-A foto do escaneamento (`src/assets/hero/scanner-intraoral.jpg`) e o texto alternativo dela (`HERO.fotoAlt`, em `src/data/site.ts`) **continuam no projeto, sem uso**. Se um dia quiser reintroduzir uma imagem ali, os dois já estão prontos — é reescrever o bloco em `src/components/sections/Hero.astro`, não recomeçar do zero.
+Botões, menu, painéis e fotos dos equipamentos respondem ao mouse.
+A preferência por movimento reduzido é respeitada.
 
 ---
 
