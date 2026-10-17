@@ -1,7 +1,7 @@
 ---
 import { Picture } from 'astro:assets';
 import { HERO } from '../../data/site';
-import fotoCapa from '../../assets/hero/andre-capa.jpg';
+import fotoCapa from '../../assets/hero/andre-capa-sem-mascara.webp';
 import CtaButton from '../CtaButton.astro';
 ---
 
@@ -13,8 +13,8 @@ import CtaButton from '../CtaButton.astro';
       src={fotoCapa}
       alt=""
       formats={['avif', 'webp']}
-      widths={[640, 960, 1195]}
-      sizes="(min-width: 1024px) 76vw, 100vw"
+      widths={[640, 960, 1449]}
+      sizes="100vw"
       loading="eager"
       fetchpriority="high"
     />
@@ -55,9 +55,9 @@ import CtaButton from '../CtaButton.astro';
     .hero-layout { padding-top: 360px; }
   }
   @media (min-width: 1024px) {
-    .hero-photo { width: 76%; height: 100%; }
-    .hero-photo :global(img) { object-position: 32% 30%; }
-    .hero-shade { background: linear-gradient(90deg, rgb(12 16 20 / .16) 0%, rgb(12 16 20 / .32) 29%, rgb(12 16 20 / .88) 53%, #0c1014 78%); }
+    .hero-photo { width: 100%; height: 100%; }
+    .hero-photo :global(img) { object-position: 35% 10%; }
+    .hero-shade { background: linear-gradient(90deg, rgb(12 16 20 / .16) 0%, rgb(12 16 20 / .26) 28%, rgb(12 16 20 / .74) 53%, rgb(12 16 20 / .78) 100%); }
     .hero-layout { display: flex; align-items: center; justify-content: flex-end; min-height: 650px; padding-block: 72px; }
     .hero-copy { width: 51%; }
     h1 { font-size: clamp(3rem, 4.5vw, 4rem); }

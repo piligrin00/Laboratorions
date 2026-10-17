@@ -289,7 +289,7 @@ texto corrido é fantasia de "técnico" e não entra.
   cima do link de contato.
 - **Capa com foto escurecida**, conforme a nova solicitação do cliente:
   André à esquerda e título, apoio, CTAs e três badges à direita no desktop.
-  A foto atual é `src/assets/hero/andre-capa.jpg`, enviada pelo cliente,
+  A foto atual é `src/assets/hero/andre-capa-sem-mascara.webp`, enviada pelo cliente,
   com André de braços cruzados ao lado do scanner.
   O escurecimento usa CSS, preservando o original. No móvel a imagem fica
   acima do texto para não sobrepor o rosto. O título aparece sem animação.
@@ -402,3 +402,5 @@ meio de um site escuro denuncia que a página foi montada, não construída.
   solução completa.
 - ❌ Estatística, depoimento, CNPJ, endereço, horário ou preço inventado.
 - ❌ Prazo diferente de 5 dias úteis sem confirmação do cliente.
+
+Revisão da capa: máscara e luvas removidas com edição de imagem por IA a pedido do cliente. O original permanece em `src/assets/hero/andre-capa.jpg`. A foto agora ocupa toda a largura no desktop; o escurecimento lateral é translúcido para manter o ambiente visível atrás do texto.

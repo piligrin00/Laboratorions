@@ -160,7 +160,7 @@ Os nomes estão em `TECNOLOGIA`, em `src/data/site.ts`, junto com o chip de cada
 
 ### Foto da capa
 
-A capa usa `src/assets/hero/andre-capa.jpg`, importada em
+A capa usa `src/assets/hero/andre-capa-sem-mascara.webp`, importada em
 `src/components/sections/Hero.astro`. No desktop, André aparece à esquerda
 com os textos à direita; no celular, a foto fica acima do texto.
 O escurecimento é feito em CSS e não altera o arquivo original.
@@ -427,3 +427,5 @@ Para conferir o que ainda falta em qualquer momento:
 ```bash
 grep -rn "XXX" src/ public/robots.txt
 ```
+
+Revisão da capa: máscara e luvas removidas com edição de imagem por IA a pedido do cliente. O original permanece em `src/assets/hero/andre-capa.jpg`. A foto agora ocupa toda a largura no desktop; o escurecimento lateral é translúcido para manter o ambiente visível atrás do texto.
