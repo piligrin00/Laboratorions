@@ -289,8 +289,8 @@ texto corrido é fantasia de "técnico" e não entra.
   cima do link de contato.
 - **Capa com foto escurecida**, conforme a nova solicitação do cliente:
   André à esquerda e título, apoio, CTAs e três badges à direita no desktop.
-  A foto atual é `src/assets/lab/andre-nascimento.jpg`; a referência enviada
-  no chat é outra foto e ainda precisa ser disponibilizada como arquivo.
+  A foto atual é `src/assets/hero/andre-capa.jpg`, enviada pelo cliente,
+  com André de braços cruzados ao lado do scanner.
   O escurecimento usa CSS, preservando o original. No móvel a imagem fica
   acima do texto para não sobrepor o rosto. O título aparece sem animação.
 - **Interações:** botões sobem 3px, setas avançam, links do menu ganham
